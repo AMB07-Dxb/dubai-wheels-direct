@@ -1,57 +1,78 @@
-import heroBg from "@/assets/hero-dubai.jpg";
+import heroSkyline from "@/assets/hero-skyline.jpg";
+import heroCar from "@/assets/hero-car.png";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, Star } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <img src={heroBg} alt="Luxury cars on Dubai highway at sunset" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1080} />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80" />
+    <section id="home" className="relative min-h-screen overflow-hidden">
+      {/* Background skyline */}
+      <img src={heroSkyline} alt="Dubai skyline at sunset" className="absolute inset-0 w-full h-full object-cover" width={1920} height={800} />
+      <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/95 via-surface-dark/70 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-surface-dark/40" />
 
-      <div className="relative z-10 container text-center max-w-4xl mx-auto px-4 pt-20">
-        <div className="inline-block bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-5 py-1.5 mb-6 animate-fade-up">
-          <p className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-primary-foreground">
-            Dubai's Trusted Car Rental
-          </p>
+      <div className="relative z-10 container mx-auto px-4 pt-28 pb-16 min-h-screen flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full">
+          {/* Left content */}
+          <div className="animate-fade-up">
+            {/* Promo badge */}
+            <div className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-4 py-1.5 mb-6">
+              <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+              <span className="text-xs font-bold tracking-wide uppercase text-primary-foreground">Limited Offer — Rent 5 Days, Get 2 Free!</span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-[1.1] mb-5 text-primary-foreground">
+              Best Cars.
+              <br />
+              Best Prices.
+              <br />
+              <span className="text-primary">Zero Hassle.</span>
+            </h1>
+
+            <p className="text-base md:text-lg max-w-lg mb-8 text-primary-foreground/65 leading-relaxed">
+              Economy to luxury — daily, weekly & monthly rentals across Dubai.
+              Insurance, maintenance & delivery included.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 mb-10">
+              <a href="#fleet">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 gap-2 w-full sm:w-auto shadow-lg shadow-primary/30 h-12">
+                  Browse Fleet <ArrowRight className="w-5 h-5" />
+                </Button>
+              </a>
+              <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 gap-2 w-full sm:w-auto backdrop-blur-sm h-12">
+                  <MessageCircle className="w-5 h-5" /> WhatsApp Us
+                </Button>
+              </a>
+            </div>
+
+            {/* Price pills */}
+            <div className="flex items-center gap-6 bg-black/30 backdrop-blur-xl rounded-2xl px-8 py-5 border border-white/10 w-fit">
+              <PricePill label="Daily" price="60" />
+              <div className="w-px h-10 bg-white/15" />
+              <PricePill label="Weekly" price="385" />
+              <div className="w-px h-10 bg-white/15" />
+              <PricePill label="Monthly" price="1,350" />
+            </div>
+            <p className="text-[10px] mt-2 text-primary-foreground/35 ml-1">Starting from • 5% VAT applicable</p>
+          </div>
+
+          {/* Right - car image */}
+          <div className="hidden lg:flex items-end justify-center animate-fade-up" style={{ animationDelay: "0.2s" }}>
+            <img
+              src={heroCar}
+              alt="Premium SUV available for rent"
+              className="w-full max-w-xl drop-shadow-2xl"
+              width={1024}
+              height={640}
+            />
+          </div>
         </div>
-
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6 animate-fade-up text-primary-foreground" style={{ animationDelay: "0.1s" }}>
-          Best Cars. Best Prices.
-          <br />
-          <span className="text-primary">Zero Hassle.</span>
-        </h1>
-
-        <p className="text-lg md:text-xl max-w-2xl mx-auto mb-10 animate-fade-up text-primary-foreground/75 leading-relaxed" style={{ animationDelay: "0.2s" }}>
-          Economy to luxury — daily, weekly & monthly rentals across Dubai.
-          <br className="hidden md:block" />
-          Insurance, maintenance & delivery included.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: "0.3s" }}>
-          <a href="#fleet">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 gap-2 w-full sm:w-auto shadow-lg shadow-primary/25">
-              Browse Fleet <ArrowRight className="w-5 h-5" />
-            </Button>
-          </a>
-          <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
-            <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-base px-8 gap-2 w-full sm:w-auto backdrop-blur-sm">
-              <MessageCircle className="w-5 h-5" /> WhatsApp Us
-            </Button>
-          </a>
-        </div>
-
-        {/* Price badge */}
-        <div className="mt-16 inline-flex items-center gap-8 bg-black/40 backdrop-blur-xl rounded-2xl px-10 py-6 border border-white/10 animate-fade-up" style={{ animationDelay: "0.5s" }}>
-          <PricePill label="Daily" price="60" />
-          <div className="w-px h-12 bg-white/15" />
-          <PricePill label="Weekly" price="385" />
-          <div className="w-px h-12 bg-white/15" />
-          <PricePill label="Monthly" price="1,350" />
-        </div>
-        <p className="text-xs mt-4 animate-fade-up text-primary-foreground/40" style={{ animationDelay: "0.6s" }}>
-          Starting from • 5% VAT applicable
-        </p>
       </div>
+
+      {/* Diagonal accent */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-background" style={{ clipPath: "polygon(0 60%, 100% 0, 100% 100%, 0 100%)" }} />
     </section>
   );
 };
@@ -59,8 +80,8 @@ const HeroSection = () => {
 const PricePill = ({ label, price }: { label: string; price: string }) => (
   <div className="text-center">
     <p className="text-[10px] font-semibold uppercase tracking-widest text-primary-foreground/50 mb-1">{label}</p>
-    <p className="text-2xl md:text-3xl font-bold text-primary-foreground">
-      <span className="text-xs font-normal text-primary-foreground/50">AED </span>{price}
+    <p className="text-xl md:text-2xl font-bold text-primary-foreground">
+      <span className="text-[10px] font-normal text-primary-foreground/50">AED </span>{price}
     </p>
   </div>
 );
