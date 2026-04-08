@@ -1,4 +1,4 @@
-import { FileText, Globe } from "lucide-react";
+import { FileText, Globe, CheckCircle2 } from "lucide-react";
 
 const DocumentsSection = () => (
   <section id="documents" className="section-padding bg-background">
@@ -22,11 +22,11 @@ const DocumentsSection = () => (
         />
       </div>
 
-      <div className="mt-10 text-center">
-        <div className="inline-flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground">
-          <span>✓ Minimum age: 22 years</span>
-          <span>✓ Insurance included</span>
-          <span>✓ Cash payments accepted</span>
+      <div className="mt-12 text-center">
+        <div className="inline-flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Minimum age: 22 years</span>
+          <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Insurance included</span>
+          <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Cash payments accepted</span>
         </div>
       </div>
     </div>
@@ -34,15 +34,15 @@ const DocumentsSection = () => (
 );
 
 const DocCard = ({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) => (
-  <div className="bg-secondary rounded-xl p-8 border border-border">
+  <div className="bg-card rounded-2xl p-8 border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 hover-lift">
     <div className="flex items-center gap-3 mb-6">
-      <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">{icon}</div>
+      <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">{icon}</div>
       <h3 className="text-xl font-semibold text-foreground font-sans">{title}</h3>
     </div>
-    <ul className="space-y-3">
+    <ul className="space-y-3.5">
       {items.map((item) => (
-        <li key={item} className="flex items-start gap-3 text-sm text-muted-foreground">
-          <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+        <li key={item} className="flex items-center gap-3 text-sm text-muted-foreground">
+          <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
           {item}
         </li>
       ))}
