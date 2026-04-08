@@ -1,0 +1,37 @@
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const ContactSection = () => (
+  <section id="contact" className="section-padding bg-surface-dark">
+    <div className="container">
+      <div className="text-center mb-14">
+        <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-2">Get In Touch</p>
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-surface-dark-foreground">Ready to Hit the Road?</h2>
+      </div>
+
+      <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+        <ContactCard icon={<Phone className="w-5 h-5" />} label="Call Us" value="+971 4 557 3386" href="tel:+97145573386" />
+        <ContactCard icon={<Mail className="w-5 h-5" />} label="Email" value="info@alemad.ae" href="mailto:info@alemad.ae" />
+        <ContactCard icon={<MapPin className="w-5 h-5" />} label="Location" value="JLT, Platinum Tower, Dubai" href="https://maps.google.com/?q=JLT+Platinum+Tower+Dubai" />
+      </div>
+
+      <div className="text-center">
+        <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
+          <Button size="lg" className="bg-[hsl(142,70%,45%)] text-primary-foreground hover:bg-[hsl(142,70%,40%)] text-base px-10 gap-2">
+            <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+);
+
+const ContactCard = ({ icon, label, value, href }: { icon: React.ReactNode; label: string; value: string; href: string }) => (
+  <a href={href} target="_blank" rel="noopener noreferrer" className="bg-surface-dark-foreground/5 border border-surface-dark-foreground/10 rounded-xl p-6 text-center hover:border-primary/40 transition-colors block">
+    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-3 text-primary">{icon}</div>
+    <p className="text-xs uppercase tracking-wider text-surface-dark-foreground/50 mb-1">{label}</p>
+    <p className="text-sm font-medium text-surface-dark-foreground">{value}</p>
+  </a>
+);
+
+export default ContactSection;
