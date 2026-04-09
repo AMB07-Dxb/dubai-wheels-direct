@@ -27,7 +27,7 @@ const slides = [
     desc: "Hyundai SantaFe 2022 — 7-seater comfort for family trips and weekend adventures.",
   },
   {
-    image: "https://www.pngimg.com/uploads/peugeot/peugeot_PNG47.png",
+    image: "https://www.pngwing.com/en/free-png-bpbkf/download",
     category: "SUV",
     title: "Premium Crossover Experience",
     subtitle: "From AED 110/day",

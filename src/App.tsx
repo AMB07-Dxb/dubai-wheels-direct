@@ -9,6 +9,7 @@ import CarDetailPage from "./pages/CarDetailPage";
 import RewardsPage from "./pages/RewardsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import ContactPage from "./pages/ContactPage";
+import SpecialOffersPage from "./pages/SpecialOffersPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/fleet" element={<FleetPage />} />
           <Route path="/fleet/:id" element={<CarDetailPage />} />
+          <Route path="/special-offers" element={<SpecialOffersPage />} />
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
           <Route path="/contact" element={<ContactPage />} />
