@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import emiratesIdImg from "@/assets/emirates-id.webp";
 
 const DocumentsSection = () => (
   <section id="documents" className="section-padding bg-muted/30">
@@ -32,7 +33,7 @@ const DocumentsSection = () => (
               </li>
             </ul>
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Emirates_ID_card.png/320px-Emirates_ID_card.png"
+              src={emiratesIdImg}
               alt="Emirates ID Card"
               className="w-32 md:w-40 object-contain rounded-lg"
               loading="lazy"
