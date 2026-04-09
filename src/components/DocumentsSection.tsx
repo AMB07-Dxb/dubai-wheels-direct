@@ -8,14 +8,14 @@ const DocumentsSection = () => (
           Essential Documents to Rent a Car in Dubai
         </h2>
         <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-          While thinking of renting a car, make sure you have all the essential documents ready. Document requirements for both UAE residents and tourists are given below.
+          Before renting a car, ensure you have all the necessary documents ready. The requirements for UAE residents and tourists are outlined below.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
         {/* UAE Residents */}
         <div className="bg-background rounded-2xl p-8 border border-border">
-          <h3 className="text-xl md:text-2xl font-display font-bold text-primary uppercase mb-6">For UAE Residents</h3>
+          <h3 className="text-xl md:text-2xl font-display font-bold text-destructive uppercase mb-6">UAE Residents</h3>
           <div className="flex items-start justify-between gap-4">
             <ul className="space-y-4 flex-1">
               <li className="flex items-center gap-3 text-foreground">
@@ -42,7 +42,7 @@ const DocumentsSection = () => (
 
         {/* Tourists */}
         <div className="bg-background rounded-2xl p-8 border border-border">
-          <h3 className="text-xl md:text-2xl font-display font-bold text-primary uppercase mb-6">For Tourists</h3>
+          <h3 className="text-xl md:text-2xl font-display font-bold text-destructive uppercase mb-6">For Tourists</h3>
           <div className="flex items-start justify-between gap-4">
             <ul className="space-y-4 flex-1">
               <li className="flex items-center gap-3 text-foreground">
@@ -59,7 +59,7 @@ const DocumentsSection = () => (
               </li>
             </ul>
             <div className="w-32 md:w-40 shrink-0 flex items-center justify-center">
-              <div className="w-24 h-32 bg-primary rounded-lg flex flex-col items-center justify-center text-primary-foreground">
+              <div className="w-24 h-32 bg-[hsl(210,80%,40%)] rounded-lg flex flex-col items-center justify-center text-background">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M2 12h20" />
