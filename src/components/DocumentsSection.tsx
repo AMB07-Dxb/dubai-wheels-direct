@@ -1,28 +1,78 @@
-import { FileText, Globe, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 const DocumentsSection = () => (
-  <section id="documents" className="section-padding bg-background">
+  <section id="documents" className="section-padding bg-muted/30">
     <div className="container">
       <div className="text-center mb-14">
-        <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-2">Getting Started</p>
-        <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground">Documents Required</h2>
-        <p className="text-muted-foreground mt-3 max-w-lg mx-auto">Renting a car in Dubai is simple. Here's what you'll need to get on the road.</p>
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground uppercase">
+          Essential Documents to Rent a Car in Dubai
+        </h2>
+        <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+          While thinking of renting a car, make sure you have all the essential documents ready. Document requirements for both UAE residents and tourists are given below.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <DocCard
-          icon={<FileText className="w-7 h-7 text-primary" />}
-          title="UAE Residents"
-          items={["Valid UAE Driving License", "Emirates ID (front & back)", "Passport & Visa page copy", "Credit / Debit Card"]}
-        />
-        <DocCard
-          icon={<Globe className="w-7 h-7 text-primary" />}
-          title="Foreign Tourists"
-          items={["Home Country Driving License + IDP", "Passport Copy", "Copy of Visa / Entry Stamp", "Credit / Debit Card"]}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* UAE Residents */}
+        <div className="bg-background rounded-2xl p-8 border border-border">
+          <h3 className="text-xl md:text-2xl font-display font-bold text-primary uppercase mb-6">For UAE Residents</h3>
+          <div className="flex items-start justify-between gap-4">
+            <ul className="space-y-4 flex-1">
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                Emirates ID
+              </li>
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                Driving License
+              </li>
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                Visa Copy
+              </li>
+            </ul>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Emirates_ID_card.png/320px-Emirates_ID_card.png"
+              alt="Emirates ID Card"
+              className="w-32 md:w-40 object-contain rounded-lg"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        {/* Tourists */}
+        <div className="bg-background rounded-2xl p-8 border border-border">
+          <h3 className="text-xl md:text-2xl font-display font-bold text-primary uppercase mb-6">For Tourists</h3>
+          <div className="flex items-start justify-between gap-4">
+            <ul className="space-y-4 flex-1">
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                Passport
+              </li>
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                Visa
+              </li>
+              <li className="flex items-center gap-3 text-foreground">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                International Driving Permit (IDP)
+              </li>
+            </ul>
+            <div className="w-32 md:w-40 shrink-0 flex items-center justify-center">
+              <div className="w-24 h-32 bg-primary rounded-lg flex flex-col items-center justify-center text-primary-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M2 12h20" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span className="text-[10px] font-bold tracking-wider uppercase">Passport</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="mt-12 text-center">
+      <div className="mt-10 text-center">
         <div className="inline-flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
           <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Minimum age: 22 years</span>
           <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Insurance included</span>
@@ -31,23 +81,6 @@ const DocumentsSection = () => (
       </div>
     </div>
   </section>
-);
-
-const DocCard = ({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) => (
-  <div className="bg-card rounded-2xl p-8 border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 hover-lift">
-    <div className="flex items-center gap-3 mb-6">
-      <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">{icon}</div>
-      <h3 className="text-xl font-semibold text-foreground font-sans">{title}</h3>
-    </div>
-    <ul className="space-y-3.5">
-      {items.map((item) => (
-        <li key={item} className="flex items-center gap-3 text-sm text-muted-foreground">
-          <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
-          {item}
-        </li>
-      ))}
-    </ul>
-  </div>
 );
 
 export default DocumentsSection;
