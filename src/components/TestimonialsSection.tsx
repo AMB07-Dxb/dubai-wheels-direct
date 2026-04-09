@@ -1,0 +1,60 @@
+import { useState } from "react";
+import { Star, Quote } from "lucide-react";
+
+const testimonials = [
+  { name: "Mitch Noblesa", date: "14-02-2025", text: "The best car rental in UAE. Car units are excellent as well as the service and hospitality of the staff. Highly recommended for people looking to rent a car. More power to your company Al Emad and thanks to the team." },
+  { name: "Elena Petrova", date: "14-09-2024", text: "I've rented cars in many countries, but this was one of my best experiences. The prices were unbeatable for Dubai, and the car I got was spotless and modern. Highly recommended for tourists who don't want to overspend on transport." },
+  { name: "Sarah Thompson", date: "23-12-2024", text: "I was in Dubai for a quick business trip and needed a reliable car on a budget. Al Emad exceeded my expectations — the car was clean, well maintained, and the pick up process was incredibly smooth." },
+  { name: "Ahmed", date: "20-04-2025", text: "I needed a second car while mine was in the shop, and these guys delivered right to my doorstep. Great pricing, no hidden fees, and the staff was very polite. I'll definitely be using them again." },
+  { name: "Jessica Ramirez", date: "14-05-2025", text: "As a solo traveler, I appreciated how easy it was to book online and get support when I landed in Dubai. The economy car I rented was fuel efficient and perfect for city driving. Customer service was responsive and helpful throughout." },
+];
+
+const TestimonialsSection = () => {
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  return (
+    <section className="section-padding bg-surface-dark relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2" />
+
+      <div className="container relative">
+        <div className="text-center mb-16">
+          <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-2">Testimonials</p>
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-surface-dark-foreground">What Our Customers Say</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          {testimonials.map((t, i) => (
+            <div
+              key={i}
+              className="relative p-8 rounded-2xl border transition-all duration-500 cursor-pointer"
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                borderColor: hovered === i ? "hsl(0 85% 50% / 0.4)" : "rgba(255,255,255,0.08)",
+                background: hovered === i ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
+                transform: hovered === i ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)",
+                boxShadow: hovered === i ? "0 25px 60px -15px rgba(220,38,38,0.15)" : "none",
+              }}
+            >
+              <Quote className={`w-8 h-8 mb-4 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-white/10"}`} />
+              <p className="text-sm text-surface-dark-foreground/70 leading-relaxed mb-6">"{t.text}"</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-semibold text-surface-dark-foreground text-sm font-sans">{t.name}</p>
+                  <p className="text-xs text-surface-dark-foreground/40">{t.date}</p>
+                </div>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} className="w-3.5 h-3.5 text-primary fill-primary" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TestimonialsSection;

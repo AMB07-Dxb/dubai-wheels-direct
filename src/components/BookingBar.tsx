@@ -1,5 +1,6 @@
 import { MapPin, Calendar, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const BookingBar = () => (
   <section className="relative z-20 -mt-6">
@@ -27,11 +28,11 @@ const BookingBar = () => (
               <input type="text" placeholder="Select date" className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground w-full outline-none" />
             </div>
           </div>
-          <a href="#fleet">
+          <Link to="/fleet">
             <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-base gap-2 shadow-md shadow-primary/20 rounded-xl">
               <Search className="w-4 h-4" /> Find a Car
             </Button>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
