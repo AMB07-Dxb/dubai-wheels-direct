@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import CursorTrail from "@/components/CursorTrail";
 
 const Index = () => (
-  <div className="min-h-screen">
+  <div className="min-h-screen bg-background">
     <CursorTrail />
     <Navbar />
     <HeroSection />
