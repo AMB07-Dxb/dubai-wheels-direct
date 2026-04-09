@@ -1,8 +1,8 @@
 import { Users, Car, Award, MapPin } from "lucide-react";
 
 const stats = [
-  { icon: Users, value: "3,000+", label: "Happy Customers" },
-  { icon: Car, value: "50+", label: "Vehicles Available" },
+  { icon: Users, value: "30,000+", label: "Happy Customers" },
+  { icon: Car, value: "900+", label: "Cars" },
   { icon: Award, value: "10+", label: "Years of Service" },
   { icon: MapPin, value: "Free", label: "Delivery Across Dubai" },
 ];
