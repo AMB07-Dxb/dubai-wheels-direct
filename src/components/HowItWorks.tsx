@@ -77,14 +77,19 @@ const HowItWorks = () => {
 
           {/* Center: Car Image */}
           <div className="hidden lg:flex items-center justify-center relative">
-            <div className="w-72 h-72 rounded-full bg-primary/10 absolute" />
+            {/* Red halo circle */}
+            <div className="w-72 h-72 rounded-full bg-destructive/80 absolute" />
+            <div className="w-80 h-80 rounded-full bg-destructive/20 absolute" />
+            {/* Shadow beneath the car */}
+            <div className="absolute bottom-2 w-52 h-8 rounded-full bg-foreground/20 blur-xl z-[5]" />
             <img
               src={gwagonTop}
               alt="G-Wagon top view"
-              className="relative z-10 w-80 h-auto object-contain drop-shadow-2xl"
+              className="relative z-10 w-80 h-auto object-contain"
               loading="lazy"
               width={768}
               height={1024}
+              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.35))" }}
             />
           </div>
 
