@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import BookingBar from "@/components/BookingBar";
 import TrustBar from "@/components/TrustBar";
 import HomeFeaturedCars from "@/components/HomeFeaturedCars";
+import WhyAlEmadBanner from "@/components/WhyAlEmadBanner";
 import HowItWorks from "@/components/HowItWorks";
 import PromosSection from "@/components/PromosSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -18,6 +19,7 @@ const Index = () => (
     <BookingBar />
     <TrustBar />
     <HomeFeaturedCars />
+    <WhyAlEmadBanner />
     <HowItWorks />
     <PromosSection />
     <TestimonialsSection />
