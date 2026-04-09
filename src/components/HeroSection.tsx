@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
-import peugeot3008Img from "@/assets/peugeot-3008.png";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
