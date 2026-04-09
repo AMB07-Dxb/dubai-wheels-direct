@@ -115,12 +115,12 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-up" style={{ animationDelay: "0.25s" }}>
               <Link to="/fleet">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg shadow-primary/30">
+                <Button size="lg" className="bg-white text-foreground hover:bg-white/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg font-semibold">
                   Browse Fleet <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
               <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl">
+                <Button size="lg" className="bg-white text-foreground hover:bg-white/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg font-semibold">
                   <MessageCircle className="w-5 h-5" /> WhatsApp Us
                 </Button>
               </a>
