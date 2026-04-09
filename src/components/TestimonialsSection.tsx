@@ -6,7 +6,6 @@ const testimonials = [
   { name: "Elena Petrova", date: "14-09-2024", text: "I've rented cars in many countries, but this was one of my best experiences. The prices were unbeatable for Dubai, and the car I got was spotless and modern. Highly recommended for tourists who don't want to overspend on transport." },
   { name: "Sarah Thompson", date: "23-12-2024", text: "I was in Dubai for a quick business trip and needed a reliable car on a budget. Al Emad exceeded my expectations — the car was clean, well maintained, and the pick up process was incredibly smooth." },
   { name: "Ahmed", date: "20-04-2025", text: "I needed a second car while mine was in the shop, and these guys delivered right to my doorstep. Great pricing, no hidden fees, and the staff was very polite. I'll definitely be using them again." },
-  { name: "Jessica Ramirez", date: "14-05-2025", text: "As a solo traveler, I appreciated how easy it was to book online and get support when I landed in Dubai. The economy car I rented was fuel efficient and perfect for city driving. Customer service was responsive and helpful throughout." },
 ];
 
 const TestimonialsSection = () => {
