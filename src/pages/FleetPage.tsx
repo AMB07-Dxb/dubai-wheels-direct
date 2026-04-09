@@ -26,7 +26,7 @@ const FleetPage = () => {
         </div>
       </section>
 
-      <section className="py-6 border-b border-border sticky top-[4.5rem] md:top-20 bg-background/95 backdrop-blur-xl z-40">
+      <section className="py-6 border-b border-border sticky top-[3.5rem] md:top-16 bg-background/95 backdrop-blur-xl z-40">
         <div className="container">
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map(cat => (
