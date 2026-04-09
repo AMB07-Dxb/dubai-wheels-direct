@@ -63,7 +63,7 @@ const FleetPage = () => {
                     <span className="absolute top-3 left-3 bg-foreground text-background text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-base font-bold text-foreground mb-2 font-sans">{car.name}</h3>
+                    <h3 className="text-base font-bold text-primary mb-2 font-sans">{car.name}</h3>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {car.seats}</span>
                       <span className="flex items-center gap-1"><Settings2 className="w-3 h-3" /> {car.transmission}</span>
@@ -93,7 +93,7 @@ const FleetPage = () => {
 const PriceBlock = ({ label, value }: { label: string; value: number }) => (
   <div className="bg-muted rounded-lg py-2 px-1">
     <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-medium">{label}</p>
-    <p className="text-xs font-bold text-foreground">{value.toLocaleString()} <span className="text-[9px] font-normal text-muted-foreground">AED</span></p>
+    <p className="text-xs font-bold text-primary">{value.toLocaleString()} <span className="text-[9px] font-normal text-primary/60">AED</span></p>
   </div>
 );
 

@@ -29,9 +29,10 @@ const HomeFeaturedCars = () => (
               <div className="relative h-52 bg-muted/30 overflow-hidden">
                 <img src={car.image} alt={car.name} className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                 <span className="absolute top-4 left-4 bg-foreground text-background text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
+                <span className="absolute top-4 left-[calc(4rem+1rem)] bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">Featured</span>
               </div>
               <div className="p-6">
-                <h3 className="text-lg font-bold text-foreground mb-3 font-sans">{car.name}</h3>
+                <h3 className="text-lg font-bold text-primary mb-3 font-sans">{car.name}</h3>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground mb-5">
                   <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" /> {car.seats}</span>
                   <span className="flex items-center gap-1.5"><Settings2 className="w-3.5 h-3.5" /> {car.transmission}</span>
@@ -57,7 +58,7 @@ const HomeFeaturedCars = () => (
 const PriceBlock = ({ label, value }: { label: string; value: number }) => (
   <div className="bg-muted rounded-xl py-2.5 px-1">
     <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</p>
-    <p className="text-sm font-bold text-foreground">{value.toLocaleString()} <span className="text-[10px] font-normal text-muted-foreground">AED</span></p>
+    <p className="text-sm font-bold text-primary">{value.toLocaleString()} <span className="text-[10px] font-normal text-primary/60">AED</span></p>
   </div>
 );
 
