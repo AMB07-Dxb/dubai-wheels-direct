@@ -10,6 +10,7 @@ import RewardsPage from "./pages/RewardsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import ContactPage from "./pages/ContactPage";
 import SpecialOffersPage from "./pages/SpecialOffersPage";
+import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
