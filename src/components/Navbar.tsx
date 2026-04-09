@@ -27,7 +27,7 @@ const Navbar = () => {
         ? "bg-background/95 backdrop-blur-xl shadow-sm border-b border-border"
         : "bg-background/80 backdrop-blur-md"
     }`}>
-      <div className="container flex items-center justify-between h-18 md:h-20">
+      <div className="container flex items-center justify-between h-14 md:h-16">
         <Link to="/" className="flex items-center gap-2.5">
           <span className="text-2xl font-display font-bold text-primary">AL EMAD</span>
           <span className="text-[10px] font-semibold tracking-[0.2em] text-muted-foreground uppercase hidden sm:inline">Rent A Car</span>
