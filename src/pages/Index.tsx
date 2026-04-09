@@ -5,6 +5,7 @@ import TrustBar from "@/components/TrustBar";
 import HomeFeaturedCars from "@/components/HomeFeaturedCars";
 import WhyAlEmadBanner from "@/components/WhyAlEmadBanner";
 import HowItWorks from "@/components/HowItWorks";
+import DocumentsSection from "@/components/DocumentsSection";
 import PromosSection from "@/components/PromosSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
