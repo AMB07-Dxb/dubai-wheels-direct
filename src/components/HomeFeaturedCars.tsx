@@ -28,8 +28,10 @@ const HomeFeaturedCars = () => (
             <div className="bg-background rounded-2xl overflow-hidden border border-border hover:border-primary/20 transition-all duration-300 hover-lift">
               <div className="relative h-52 bg-muted/30 overflow-hidden">
                 <img src={car.image} alt={car.name} className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                <span className="absolute top-4 left-4 bg-foreground text-background text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
-                <span className="absolute top-4 left-[calc(4rem+1rem)] bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">Featured</span>
+                <div className="absolute top-4 left-4 flex items-center gap-2">
+                  <span className="bg-foreground text-background text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
+                  <span className="bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">Featured</span>
+                </div>
               </div>
               <div className="p-6">
                 <h3 className="text-lg font-bold text-primary mb-3 font-sans">{car.name}</h3>
