@@ -20,15 +20,15 @@ const DocumentsSection = () => (
           <div className="flex items-start justify-between gap-4">
             <ul className="space-y-4 flex-1">
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 Emirates ID
               </li>
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 Driving License
               </li>
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 Visa Copy
               </li>
             </ul>
@@ -47,15 +47,15 @@ const DocumentsSection = () => (
           <div className="flex items-start justify-between gap-4">
             <ul className="space-y-4 flex-1">
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 Passport
               </li>
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 Visa
               </li>
               <li className="flex items-center gap-3 text-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shrink-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-foreground shrink-0" />
                 International Driving Permit (IDP)
               </li>
             </ul>
