@@ -3,12 +3,12 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 
 const testimonials = [
-  { name: "Omar K., Saudi Arabia", car: "Mercedes E 200 2025", text: "This rental experience stood out from all previous car rentals I have used as the best one. No hidden fees, easy booking, and great vehicle options. The staff were incredibly helpful and made the whole process seamless.", initial: "O", source: "google" },
-  { name: "Aisha M., UAE", car: "Bentley Bentayga S V8 2025", text: "The team assisted me to find the perfect car rent in Dubai plan. This entire rental experience worked without any problems as the vehicle arrived in flawless condition. Highly recommend their premium fleet.", initial: "A", source: "trustpilot" },
-  { name: "James R., UAE", car: "Peugeot 5008 2025", text: "Renting a car was so easy! I experienced a rapid booking process from them that led to direct car delivery at my hotel. And their car rental prices in Dubai were better than I expected. Excellent service all around.", initial: "J", source: "reviews" },
-  { name: "Mitch Noblesa", car: "Toyota Camry 2024", text: "The best car rental in UAE. Car units are excellent as well as the service and hospitality of the staff. Highly recommended for people looking to rent a car. More power to your company Al Emad and thanks to the team.", initial: "M", source: "google" },
-  { name: "Elena Petrova", car: "Nissan Kicks 2024", text: "I've rented cars in many countries, but this was one of my best experiences. The prices were unbeatable for Dubai, and the car I got was spotless and modern. Highly recommended for tourists who don't want to overspend on transport.", initial: "E", source: "trustpilot" },
-  { name: "Sarah Thompson", car: "Kia Seltos 2023", text: "I was in Dubai for a quick business trip and needed a reliable car on a budget. Al Emad exceeded my expectations — the car was clean, well maintained, and the pick up process was incredibly smooth. Will use again!", initial: "S", source: "google" },
+  { name: "Omar K., Saudi Arabia", car: "Toyota Corolla 2024", text: "Rented the Corolla for two weeks while visiting family in Dubai. The car was delivered right to my hotel lobby within an hour of booking. Fuel-efficient, comfortable, and the AC worked perfectly even in 45°C heat. No surprise charges at return.", initial: "O", source: "google" },
+  { name: "Aisha M., UAE", car: "Nissan Kicks 2024", text: "Needed a compact SUV for daily commutes while my car was being serviced. The Kicks they gave me was practically brand new — less than 5,000 km on it. Smooth handover, fair pricing, and the team even reminded me about toll registration. Very thoughtful.", initial: "A", source: "trustpilot" },
+  { name: "James R., UK", car: "Hyundai Tucson 2024", text: "First time renting in the UAE and I was a bit nervous about the process. The staff walked me through everything, explained the insurance coverage, and had the Tucson ready with a full tank. Drove it across Dubai and Abu Dhabi with zero issues.", initial: "J", source: "reviews" },
+  { name: "Mitch Noblesa", car: "Kia Seltos 2023", text: "I've used three different rental companies in Dubai before switching to Al Emad. The difference is night and day — their cars are genuinely well maintained, not just washed on the outside. My Seltos drove like it just came off the lot.", initial: "M", source: "google" },
+  { name: "Elena Petrova", car: "MG ZS 2024", text: "Booked the MG ZS for a month-long stay and the monthly rate saved me a fortune compared to taxis. Clean interior, responsive steering, and the free delivery to Dubai Marina was a huge bonus. Already rebooked for my next trip.", initial: "E", source: "trustpilot" },
+  { name: "Sarah Thompson", car: "Mitsubishi ASX 2024", text: "Picked up the ASX for a weekend trip to Hatta with friends. Plenty of boot space for our gear, the car handled the mountain roads well, and returning it at a different location was no hassle at all. Genuinely impressed.", initial: "S", source: "google" },
 ];
 
 const sourceIcons: Record<string, { label: string; color: string }> = {
@@ -44,7 +44,7 @@ const TestimonialsSection = () => {
   }, [emblaApi]);
 
   return (
-    <section className="section-padding bg-background relative overflow-hidden">
+    <section className="pt-16 pb-8 bg-background relative overflow-hidden">
       <div className="container relative">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-6">
