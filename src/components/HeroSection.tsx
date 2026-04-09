@@ -135,13 +135,13 @@ const HeroSection = () => {
           </div>
 
           {/* Right: Car image */}
-          <div className="hidden lg:flex items-end justify-center relative h-[450px] translate-y-10">
+          <div className="hidden lg:flex items-center justify-center relative h-[450px] translate-y-10">
             {slides.map((slide, i) => (
               <img
                 key={i}
                 src={slide.image}
                 alt={`${slide.category} car for rent`}
-                className="absolute w-full max-w-[580px] h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-700 ease-in-out"
+                className="absolute max-w-[580px] w-full h-[300px] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-700 ease-in-out"
                 style={{
                   opacity: current === i ? 1 : 0,
                   transform: current === i
