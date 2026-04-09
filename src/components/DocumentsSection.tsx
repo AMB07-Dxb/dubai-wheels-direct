@@ -2,7 +2,7 @@ import { CheckCircle2 } from "lucide-react";
 import emiratesIdImg from "@/assets/emirates-id.webp";
 
 const DocumentsSection = () => (
-  <section id="documents" className="section-padding bg-muted/30">
+  <section id="documents" className="py-12 bg-muted/30">
     <div className="container">
       <div className="text-center mb-14">
         <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground uppercase">
