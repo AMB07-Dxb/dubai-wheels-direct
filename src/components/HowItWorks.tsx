@@ -76,12 +76,12 @@ const HowItWorks = () => {
           </div>
 
           {/* Center: Car Image */}
-          <div className="hidden lg:flex items-center justify-center relative">
-            {/* Red halo circle */}
-            <div className="w-72 h-72 rounded-full bg-destructive/80 absolute" />
-            <div className="w-80 h-80 rounded-full bg-destructive/20 absolute" />
-            {/* Shadow beneath the car */}
-            <div className="absolute bottom-2 w-52 h-8 rounded-full bg-foreground/20 blur-xl z-[5]" />
+          <div className="hidden lg:flex items-center justify-center relative" style={{ minHeight: "400px" }}>
+            {/* Outer soft gray glow */}
+            <div className="absolute w-[340px] h-[340px] rounded-full" style={{ background: "radial-gradient(circle, hsl(var(--muted)) 0%, transparent 70%)" }} />
+            {/* Solid red circle */}
+            <div className="absolute w-64 h-64 rounded-full bg-[hsl(0,85%,50%)]" />
+            {/* Car image with natural shadow */}
             <img
               src={gwagonTop}
               alt="G-Wagon top view"
@@ -89,7 +89,7 @@ const HowItWorks = () => {
               loading="lazy"
               width={768}
               height={1024}
-              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.35))" }}
+              style={{ filter: "drop-shadow(0 25px 30px rgba(0,0,0,0.4))" }}
             />
           </div>
 
