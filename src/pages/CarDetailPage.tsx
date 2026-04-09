@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { allCars } from "@/data/cars";
-import { Users, Fuel, Settings2, Briefcase, Car, Phone, MessageCircle, ArrowLeft, DoorOpen } from "lucide-react";
+import { Users, Briefcase, Settings2, Fuel, ArrowLeft, MessageCircle, CalendarCheck, DoorOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -23,58 +23,93 @@ const CarDetailPage = () => {
   }
 
   const similar = allCars.filter(c => c.category === car.category && c.id !== car.id).slice(0, 4);
+  const whatsappMsg = encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="pt-24 pb-16">
+      <section className="pt-24 pb-8">
         <div className="container">
-          <Link to="/fleet" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
+          <Link to="/fleet" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" /> Back to Fleet
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Image */}
-            <div className="bg-muted/30 rounded-3xl p-8 flex items-center justify-center border border-border">
-              <img src={car.image} alt={car.name} className="w-full max-w-lg object-contain" />
+          {/* Car Name & Category */}
+          <div className="mb-8">
+            <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mt-4">{car.name}</h1>
+            <p className="text-muted-foreground mt-1">{car.brand} • {car.year} • {car.transmission} • {car.fuel}</p>
+          </div>
+
+          {/* Image + Prices + CTAs */}
+          <div className="bg-muted/20 rounded-3xl border border-border p-6 md:p-10 mb-10">
+            <div className="flex items-center justify-center mb-8">
+              <img src={car.image} alt={car.name} className="w-full max-w-2xl object-contain h-[300px]" />
             </div>
 
-            {/* Details */}
-            <div>
-              <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mt-4 mb-2">{car.name}</h1>
-              <p className="text-muted-foreground mb-8">Brand: {car.brand} • Year: {car.year} • {car.transmission} • {car.fuel}</p>
+            {/* Price Cards */}
+            <div className="grid grid-cols-3 gap-4 mb-8 max-w-xl mx-auto">
+              <PriceCard label="Daily" value={car.daily} />
+              <PriceCard label="Weekly" value={car.weekly} />
+              <PriceCard label="Monthly" value={car.monthly} highlight />
+            </div>
 
-              {/* Specs */}
-              <div className="grid grid-cols-4 gap-4 mb-8">
-                <Spec icon={<Users className="w-5 h-5" />} label="Seats" value={String(car.seats)} />
-                <Spec icon={<DoorOpen className="w-5 h-5" />} label="Doors" value={String(car.doors)} />
-                <Spec icon={<Briefcase className="w-5 h-5" />} label="Luggage" value={String(car.luggage)} />
-                <Spec icon={<Settings2 className="w-5 h-5" />} label="Trans." value={car.transmission} />
+            <p className="text-xs text-center text-muted-foreground mb-6">5% VAT applicable • Insurance & maintenance included • Free delivery in Dubai</p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+              <a href={`https://wa.me/97145573386?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+                <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white gap-2 rounded-xl text-sm font-semibold h-13">
+                  <MessageCircle className="w-5 h-5" /> WhatsApp Now
+                </Button>
+              </a>
+              <a href={`https://wa.me/97145573386?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+                <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2 rounded-xl text-sm font-semibold h-13">
+                  <CalendarCheck className="w-5 h-5" /> Book Now
+                </Button>
+              </a>
+            </div>
+          </div>
+
+          {/* Content Grid: Description + General Info */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
+            {/* Left: Description */}
+            <div className="lg:col-span-3">
+              <h2 className="text-2xl font-display font-bold text-primary mb-4 uppercase">About the {car.name}</h2>
+              <div className="w-16 h-1 bg-primary rounded-full mb-6" />
+              <p className="text-foreground/80 leading-relaxed mb-10 text-[15px]">{car.description}</p>
+
+              <h2 className="text-2xl font-display font-bold text-primary mb-4 uppercase">Why Choose the {car.brand} {car.name.split(' ').slice(-1)[0]}</h2>
+              <div className="w-16 h-1 bg-primary rounded-full mb-6" />
+              <div className="space-y-4 text-foreground/80 text-[15px] leading-relaxed">
+                <p>When you rent the {car.name} from Al Emad Rent A Car, you get more than just a vehicle — you get a complete mobility solution. Every rental includes comprehensive insurance, free maintenance, and complimentary delivery anywhere in Dubai.</p>
+                <p>Whether you're visiting Dubai for business or leisure, the {car.name} provides the perfect combination of {car.category === "Economy" ? "affordability and reliability" : car.category === "Sedan" ? "style and performance" : car.category === "SUV" ? "space and versatility" : "prestige and luxury"}. Book today and experience the Al Emad difference.</p>
+              </div>
+            </div>
+
+            {/* Right: General Information */}
+            <div className="lg:col-span-2">
+              <h2 className="text-2xl font-display font-bold text-primary mb-6">General Information</h2>
+              <div className="border border-border rounded-2xl overflow-hidden">
+                <InfoRow label="SEATS" value={String(car.seats)} />
+                <InfoRow label="LUGGAGE(S)" value={String(car.luggage)} />
+                <InfoRow label="DOORS" value={String(car.doors)} />
+                <InfoRow label="TRANSMISSION" value={car.transmission === "Auto" ? "Automatic" : "Manual"} />
+                <InfoRow label="BODY TYPE" value={car.bodyType} />
+                <InfoRow label="FUEL TYPE" value={car.fuel.toLowerCase()} />
+                <InfoRow label="HORSEPOWER" value={String(car.horsepower)} />
+                <InfoRow label="ENGINE" value={car.engine} />
+                <InfoRow label="YEAR" value={String(car.year)} />
+                <InfoRow label="MODEL" value={car.name.split(' ').slice(1, -1).join(' ')} last />
               </div>
 
-              {/* Pricing */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                <PriceCard label="Daily" value={car.daily} />
-                <PriceCard label="Weekly" value={car.weekly} />
-                <PriceCard label="Monthly" value={car.monthly} highlight />
-              </div>
-
-              <p className="text-xs text-muted-foreground mb-6">5% VAT applicable on all prices. Insurance, maintenance & delivery included.</p>
-
-              {/* CTA */}
-              <div className="flex gap-3">
-                <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-2 shadow-lg shadow-primary/20">
-                    <MessageCircle className="w-5 h-5" /> Book on WhatsApp
-                  </Button>
-                </a>
-                <a href="tel:+97145573386">
-                  <Button size="lg" variant="outline" className="border-border hover:border-primary/30 gap-2">
-                    <Phone className="w-5 h-5" /> Call
-                  </Button>
-                </a>
+              {/* Car Features */}
+              <h2 className="text-2xl font-display font-bold text-primary mt-8 mb-6">Car Features</h2>
+              <div className="border border-border rounded-2xl overflow-hidden">
+                {car.features.map((f, i) => (
+                  <InfoRow key={f} label={f.toUpperCase()} value="✓" last={i === car.features.length - 1} />
+                ))}
               </div>
             </div>
           </div>
@@ -83,18 +118,18 @@ const CarDetailPage = () => {
 
       {/* Similar Cars */}
       {similar.length > 0 && (
-        <section className="pb-20">
+        <section className="py-16">
           <div className="container">
             <h2 className="text-2xl font-display font-bold text-foreground mb-8">Similar Vehicles</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {similar.map(c => (
-                <Link key={c.id} to={`/fleet/${c.id}`} className="block">
-                  <div className="bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 hover-lift">
+                <Link key={c.id} to={`/fleet/${c.id}`} className="block group">
+                  <div className="bg-background rounded-2xl overflow-hidden border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 hover-lift">
                     <div className="h-40 bg-muted/30 overflow-hidden">
-                      <img src={c.image} alt={c.name} className="w-full h-full object-contain p-4" loading="lazy" />
+                      <img src={c.image} alt={c.name} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                     </div>
                     <div className="p-4">
-                      <h3 className="font-bold text-sm text-card-foreground font-sans mb-1">{c.name}</h3>
+                      <h3 className="font-bold text-sm text-primary font-sans mb-1">{c.name}</h3>
                       <p className="text-xs text-muted-foreground">From <span className="font-bold text-primary">{c.daily} AED</span>/day</p>
                     </div>
                   </div>
@@ -110,19 +145,18 @@ const CarDetailPage = () => {
   );
 };
 
-const Spec = ({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) => (
-  <div className="bg-muted/50 rounded-xl p-4 text-center">
-    <div className="text-primary mx-auto mb-2 flex justify-center">{icon}</div>
-    <p className="text-xs text-muted-foreground">{label}</p>
-    <p className="font-bold text-sm text-foreground">{value}</p>
+const PriceCard = ({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) => (
+  <div className={`rounded-2xl p-5 text-center border ${highlight ? "border-primary bg-primary/5" : "border-border bg-background"}`}>
+    <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-1">{label}</p>
+    <p className="text-2xl font-bold text-primary">{value.toLocaleString()}</p>
+    <p className="text-xs text-muted-foreground">AED</p>
   </div>
 );
 
-const PriceCard = ({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) => (
-  <div className={`rounded-2xl p-5 text-center border ${highlight ? "border-primary bg-primary/5" : "border-border bg-card"}`}>
-    <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-1">{label}</p>
-    <p className="text-2xl font-bold text-foreground">{value.toLocaleString()}</p>
-    <p className="text-xs text-muted-foreground">AED</p>
+const InfoRow = ({ label, value, last }: { label: string; value: string; last?: boolean }) => (
+  <div className={`flex items-center justify-between px-5 py-3.5 ${!last ? "border-b border-border" : ""}`}>
+    <span className="text-sm font-medium text-foreground">{label}</span>
+    <span className="text-sm text-muted-foreground">{value}</span>
   </div>
 );
 
