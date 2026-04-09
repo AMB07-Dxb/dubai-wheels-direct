@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
-import peugeot3008Img from "@/assets/peugeot-3008.png";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -28,11 +27,11 @@ const slides = [
     desc: "Hyundai SantaFe 2022 — 7-seater comfort for family trips and weekend adventures.",
   },
   {
-    image: peugeot3008Img,
+    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_620_819.png",
     category: "SUV",
-    title: "Premium Crossover Experience",
-    subtitle: "From AED 110/day",
-    desc: "Peugeot 3008 2025 — European design meets Dubai roads. Free delivery included.",
+    title: "Turbocharged Compact SUV",
+    subtitle: "From AED 120/day",
+    desc: "Kia Seltos 2023 — turbocharged performance, dual screens, and bold design for Dubai roads.",
   },
 ];
 
