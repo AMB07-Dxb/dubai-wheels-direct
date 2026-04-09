@@ -13,7 +13,7 @@ const TestimonialsSection = () => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section className="section-padding bg-muted/30 relative overflow-hidden">
+    <section className="section-padding bg-background relative overflow-hidden">
       <div className="container relative">
         <div className="text-center mb-16">
           <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Testimonials</p>
@@ -28,12 +28,12 @@ const TestimonialsSection = () => {
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
-                borderColor: hovered === i ? "hsl(0 85% 50% / 0.25)" : "hsl(0 0% 92%)",
+                borderColor: hovered === i ? "hsl(var(--primary) / 0.25)" : "hsl(var(--border))",
                 transform: hovered === i ? "translateY(-8px)" : "translateY(0)",
                 boxShadow: hovered === i ? "0 25px 60px -15px rgba(0,0,0,0.1)" : "0 2px 8px rgba(0,0,0,0.03)",
               }}
             >
-              <Quote className={`w-8 h-8 mb-4 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-border"}`} />
+              <Quote className={`w-8 h-8 mb-4 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-muted-foreground/30"}`} />
               <p className="text-sm text-muted-foreground leading-relaxed mb-6">"{t.text}"</p>
               <div className="flex items-center justify-between">
                 <div>
