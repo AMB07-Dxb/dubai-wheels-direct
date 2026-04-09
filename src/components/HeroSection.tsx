@@ -1,41 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
-import heroCar1 from "@/assets/hero-car-1.png";
-import heroCar2 from "@/assets/hero-car-2.png";
-import heroCar3 from "@/assets/hero-car-3.png";
-import heroCar4 from "@/assets/hero-car-4.png";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const slides = [
   {
-    image: heroCar1,
-    category: "Economy",
+    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_1140_201.png",
+    category: "Sedan",
     title: "Affordable Daily Rentals",
-    subtitle: "From AED 50/day",
-    desc: "Quality economy cars with insurance, free delivery & maintenance included across Dubai.",
+    subtitle: "From AED 90/day",
+    desc: "The all-new Mazda 3 2025 — stylish, fuel-efficient, and perfect for Dubai city driving.",
   },
   {
-    image: heroCar2,
+    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_1133_312.png",
+    category: "Economy",
+    title: "Smart & Economical",
+    subtitle: "From AED 80/day",
+    desc: "Geely Emgrand 2025 — a spacious, modern sedan at unbeatable rates with full insurance.",
+  },
+  {
+    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_574_860.webp",
     category: "SUV",
-    title: "Spacious SUVs for Every Journey",
-    subtitle: "From AED 120/day",
-    desc: "Premium SUVs perfect for families and adventures. Free delivery anywhere in Dubai.",
+    title: "Spacious Family SUVs",
+    subtitle: "From AED 170/day",
+    desc: "Hyundai SantaFe 2022 — 7-seater comfort for family trips and weekend adventures.",
   },
   {
-    image: heroCar3,
-    category: "Luxury",
-    title: "Drive in Style & Comfort",
-    subtitle: "From AED 200/day",
-    desc: "Experience Dubai in luxury. Premium sedans with full insurance and 24/7 support.",
-  },
-  {
-    image: heroCar4,
-    category: "Compact",
-    title: "Smart City Cars",
-    subtitle: "From AED 55/day",
-    desc: "Fuel-efficient compact cars ideal for city driving. Weekly & monthly plans available.",
+    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_555_915.webp",
+    category: "SUV",
+    title: "Premium Crossover Experience",
+    subtitle: "From AED 110/day",
+    desc: "Peugeot 3008 2025 — European design meets Dubai roads. Free delivery included.",
   },
 ];
 
@@ -69,8 +65,8 @@ const HeroSection = () => {
           width={1920}
           height={800}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-black/10" />
       </div>
 
       {/* Content */}
