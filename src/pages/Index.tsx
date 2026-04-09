@@ -22,6 +22,7 @@ const Index = () => (
     <HomeFeaturedCars />
     <WhyAlEmadBanner />
     <HowItWorks />
+    <DocumentsSection />
     <PromosSection />
     <TestimonialsSection />
     <FAQSection />
