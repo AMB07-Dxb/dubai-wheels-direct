@@ -8,7 +8,7 @@ const featured = allCars.filter(c =>
 );
 
 const HomeFeaturedCars = () => (
-  <section className="section-padding bg-background">
+  <section className="section-padding pb-6 bg-background">
     <div className="container">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
         <div>
