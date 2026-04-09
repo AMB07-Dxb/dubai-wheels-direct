@@ -2,28 +2,26 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import BookingBar from "@/components/BookingBar";
 import TrustBar from "@/components/TrustBar";
-import RewardsSection from "@/components/RewardsSection";
-import FleetSection from "@/components/FleetSection";
+import HomeFeaturedCars from "@/components/HomeFeaturedCars";
 import HowItWorks from "@/components/HowItWorks";
 import PromosSection from "@/components/PromosSection";
-import WhyUsSection from "@/components/WhyUsSection";
-import DocumentsSection from "@/components/DocumentsSection";
-import ContactSection from "@/components/ContactSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
+import CursorTrail from "@/components/CursorTrail";
 
 const Index = () => (
   <div className="min-h-screen">
+    <CursorTrail />
     <Navbar />
     <HeroSection />
     <BookingBar />
     <TrustBar />
-    <RewardsSection />
-    <FleetSection />
+    <HomeFeaturedCars />
     <HowItWorks />
     <PromosSection />
-    <WhyUsSection />
-    <DocumentsSection />
-    <ContactSection />
+    <TestimonialsSection />
+    <FAQSection />
     <Footer />
   </div>
 );
