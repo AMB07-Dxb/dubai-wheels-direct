@@ -1,119 +1,197 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import heroBg from "@/assets/hero-bg.jpg";
 import heroCar1 from "@/assets/hero-car-1.png";
 import heroCar2 from "@/assets/hero-car-2.png";
 import heroCar3 from "@/assets/hero-car-3.png";
+import heroCar4 from "@/assets/hero-car-4.png";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const heroSlides = [
-  { image: heroCar1, label: "Economy" },
-  { image: heroCar2, label: "SUV" },
-  { image: heroCar3, label: "Luxury" },
+const slides = [
+  {
+    image: heroCar1,
+    category: "Economy",
+    title: "Affordable Daily Rentals",
+    subtitle: "From AED 50/day",
+    desc: "Quality economy cars with insurance, free delivery & maintenance included across Dubai.",
+  },
+  {
+    image: heroCar2,
+    category: "SUV",
+    title: "Spacious SUVs for Every Journey",
+    subtitle: "From AED 120/day",
+    desc: "Premium SUVs perfect for families and adventures. Free delivery anywhere in Dubai.",
+  },
+  {
+    image: heroCar3,
+    category: "Luxury",
+    title: "Drive in Style & Comfort",
+    subtitle: "From AED 200/day",
+    desc: "Experience Dubai in luxury. Premium sedans with full insurance and 24/7 support.",
+  },
+  {
+    image: heroCar4,
+    category: "Compact",
+    title: "Smart City Cars",
+    subtitle: "From AED 55/day",
+    desc: "Fuel-efficient compact cars ideal for city driving. Weekly & monthly plans available.",
+  },
 ];
 
 const HeroSection = () => {
   const [current, setCurrent] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const goTo = useCallback((idx: number) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrent(idx);
+    setTimeout(() => setIsTransitioning(false), 700);
+  }, [isTransitioning]);
+
+  const next = useCallback(() => goTo((current + 1) % slides.length), [current, goTo]);
+  const prev = useCallback(() => goTo((current - 1 + slides.length) % slides.length), [current, goTo]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % heroSlides.length);
-    }, 4000);
+    const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [next]);
 
   return (
-    <section id="home" className="relative min-h-[90vh] overflow-hidden bg-background">
-      {/* Subtle accent shapes */}
-      <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-muted rounded-full blur-3xl" />
+    <section id="home" className="relative h-[85vh] min-h-[600px] overflow-hidden">
+      {/* Fixed background */}
+      <div className="absolute inset-0">
+        <img
+          src={heroBg}
+          alt=""
+          className="w-full h-full object-cover"
+          width={1920}
+          height={800}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
 
-      <div className="relative z-10 container mx-auto px-4 pt-32 pb-20 min-h-[90vh] flex items-center">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-          <div className="animate-fade-up">
-            <div className="inline-flex items-center gap-2 bg-primary/10 rounded-full px-4 py-1.5 mb-8">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-xs font-semibold tracking-wide text-primary">Rent 5 Days, Get 2 Free</span>
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center w-full">
+          {/* Left: Text */}
+          <div className="text-white">
+            {/* Category badge */}
+            <div
+              key={`badge-${current}`}
+              className="inline-flex items-center gap-2 bg-primary rounded-full px-4 py-1.5 mb-6 animate-fade-up"
+            >
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs font-semibold tracking-wide text-white">{slides[current].category}</span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] mb-6 text-foreground">
+            <h1
+              key={`title-${current}`}
+              className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-[1.1] mb-4 text-white animate-fade-up"
+              style={{ animationDelay: "0.1s" }}
+            >
               Premium Cars.
               <br />
               <span className="text-primary">Best Prices.</span>
             </h1>
 
-            <p className="text-lg max-w-md mb-10 text-muted-foreground leading-relaxed">
-              Economy to luxury — daily, weekly & monthly rentals across Dubai.
-              Insurance, delivery & maintenance included.
+            <p
+              key={`subtitle-${current}`}
+              className="text-xl md:text-2xl font-semibold text-white/90 mb-2 animate-fade-up"
+              style={{ animationDelay: "0.15s" }}
+            >
+              {slides[current].subtitle}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-14">
+            <p
+              key={`desc-${current}`}
+              className="text-base max-w-md mb-8 text-white/60 leading-relaxed animate-fade-up"
+              style={{ animationDelay: "0.2s" }}
+            >
+              {slides[current].desc}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-up" style={{ animationDelay: "0.25s" }}>
               <Link to="/fleet">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg shadow-primary/20">
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg shadow-primary/30">
                   Browse Fleet <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
               <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-foreground/15 text-foreground hover:bg-muted text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl">
+                <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl">
                   <MessageCircle className="w-5 h-5" /> WhatsApp Us
                 </Button>
               </a>
             </div>
 
-            <div className="flex items-center gap-8 bg-muted rounded-2xl px-8 py-6 w-fit">
+            {/* Price pills */}
+            <div className="flex items-center gap-6 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-5 w-fit border border-white/10">
               <PricePill label="Daily" price="50" />
-              <div className="w-px h-10 bg-border" />
+              <div className="w-px h-10 bg-white/20" />
               <PricePill label="Weekly" price="315" />
-              <div className="w-px h-10 bg-border" />
+              <div className="w-px h-10 bg-white/20" />
               <PricePill label="Monthly" price="990" />
             </div>
-            <p className="text-[11px] mt-3 text-muted-foreground ml-1">Starting from • 5% VAT applicable</p>
+            <p className="text-[11px] mt-2 text-white/40 ml-1">Starting from • 5% VAT applicable</p>
           </div>
 
-          {/* Car slideshow */}
-          <div className="hidden lg:flex flex-col items-center justify-center animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <div className="relative w-full max-w-xl h-[400px]">
-              {heroSlides.map((slide, i) => (
-                <img
-                  key={i}
-                  src={slide.image}
-                  alt={`${slide.label} car available for rent`}
-                  className="absolute inset-0 w-full h-full object-contain transition-all duration-700 ease-in-out drop-shadow-2xl"
-                  style={{
-                    opacity: current === i ? 1 : 0,
-                    transform: current === i ? "translateX(0) scale(1)" : "translateX(40px) scale(0.95)",
-                  }}
-                  width={1024}
-                  height={640}
-                />
-              ))}
-            </div>
-
-            {/* Slide indicators */}
-            <div className="flex items-center gap-3 mt-6">
-              {heroSlides.map((slide, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className="flex items-center gap-2 group"
-                >
-                  <div
-                    className="h-1.5 rounded-full transition-all duration-500"
-                    style={{
-                      width: current === i ? "32px" : "12px",
-                      backgroundColor: current === i ? "hsl(var(--primary))" : "hsl(var(--border))",
-                    }}
-                  />
-                  {current === i && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">
-                      {slide.label}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+          {/* Right: Car image */}
+          <div className="hidden lg:flex items-center justify-center relative h-[450px]">
+            {slides.map((slide, i) => (
+              <img
+                key={i}
+                src={slide.image}
+                alt={`${slide.category} car for rent`}
+                className="absolute w-full max-w-[580px] h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-700 ease-in-out"
+                style={{
+                  opacity: current === i ? 1 : 0,
+                  transform: current === i
+                    ? "translateX(0) scale(1)"
+                    : i > current
+                      ? "translateX(80px) scale(0.9)"
+                      : "translateX(-80px) scale(0.9)",
+                }}
+                width={1024}
+                height={640}
+              />
+            ))}
           </div>
         </div>
+      </div>
+
+      {/* Navigation arrows */}
+      <button
+        onClick={prev}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all duration-300"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all duration-300"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Slide indicators */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className="group relative"
+          >
+            <div
+              className="h-1.5 rounded-full transition-all duration-500"
+              style={{
+                width: current === i ? "40px" : "12px",
+                backgroundColor: current === i ? "hsl(var(--primary))" : "rgba(255,255,255,0.4)",
+              }}
+            />
+          </button>
+        ))}
       </div>
     </section>
   );
@@ -121,9 +199,9 @@ const HeroSection = () => {
 
 const PricePill = ({ label, price }: { label: string; price: string }) => (
   <div className="text-center">
-    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">{label}</p>
-    <p className="text-2xl md:text-3xl font-bold text-foreground">
-      <span className="text-[10px] font-normal text-muted-foreground">AED </span>{price}
+    <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50 mb-1">{label}</p>
+    <p className="text-2xl md:text-3xl font-bold text-white">
+      <span className="text-[10px] font-normal text-white/50">AED </span>{price}
     </p>
   </div>
 );
