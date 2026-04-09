@@ -20,14 +20,14 @@ const slides = [
     desc: "Geely Emgrand 2025 — a spacious, modern sedan at unbeatable rates with full insurance.",
   },
   {
-    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_574_860.webp",
+    image: "https://www.pngmart.com/files/22/Hyundai-Santa-Fe-PNG-Isolated-HD.png",
     category: "SUV",
     title: "Spacious Family SUVs",
     subtitle: "From AED 170/day",
     desc: "Hyundai SantaFe 2022 — 7-seater comfort for family trips and weekend adventures.",
   },
   {
-    image: "https://www.caryaati.com/erps/admin/images/model/model_sp_555_915.webp",
+    image: "https://www.pngmart.com/files/22/Peugeot-3008-PNG-Isolated-HD.png",
     category: "SUV",
     title: "Premium Crossover Experience",
     subtitle: "From AED 110/day",
@@ -134,7 +134,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right: Car image */}
-          <div className="hidden lg:flex items-center justify-center relative h-[450px]">
+          <div className="hidden lg:flex items-end justify-center relative h-[450px] translate-y-10">
             {slides.map((slide, i) => (
               <img
                 key={i}
