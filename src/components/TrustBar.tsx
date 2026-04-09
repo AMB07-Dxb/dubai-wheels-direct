@@ -8,7 +8,7 @@ const stats = [
 ];
 
 const TrustBar = () => (
-  <section className="py-16 bg-muted/40">
+  <section className="py-16 bg-background border-y border-border">
     <div className="container">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         {stats.map((s) => (

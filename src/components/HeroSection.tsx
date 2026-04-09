@@ -1,9 +1,27 @@
-import heroCar from "@/assets/hero-car.png";
+import { useState, useEffect } from "react";
+import heroCar1 from "@/assets/hero-car-1.png";
+import heroCar2 from "@/assets/hero-car-2.png";
+import heroCar3 from "@/assets/hero-car-3.png";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
+const heroSlides = [
+  { image: heroCar1, label: "Economy" },
+  { image: heroCar2, label: "SUV" },
+  { image: heroCar3, label: "Luxury" },
+];
+
 const HeroSection = () => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % heroSlides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section id="home" className="relative min-h-[90vh] overflow-hidden bg-background">
       {/* Subtle accent shapes */}
@@ -52,8 +70,48 @@ const HeroSection = () => {
             <p className="text-[11px] mt-3 text-muted-foreground ml-1">Starting from • 5% VAT applicable</p>
           </div>
 
-          <div className="hidden lg:flex items-center justify-center animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            <img src={heroCar} alt="Premium car available for rent" className="w-full max-w-xl drop-shadow-2xl" width={1024} height={640} />
+          {/* Car slideshow */}
+          <div className="hidden lg:flex flex-col items-center justify-center animate-fade-up" style={{ animationDelay: "0.2s" }}>
+            <div className="relative w-full max-w-xl h-[400px]">
+              {heroSlides.map((slide, i) => (
+                <img
+                  key={i}
+                  src={slide.image}
+                  alt={`${slide.label} car available for rent`}
+                  className="absolute inset-0 w-full h-full object-contain transition-all duration-700 ease-in-out drop-shadow-2xl"
+                  style={{
+                    opacity: current === i ? 1 : 0,
+                    transform: current === i ? "translateX(0) scale(1)" : "translateX(40px) scale(0.95)",
+                  }}
+                  width={1024}
+                  height={640}
+                />
+              ))}
+            </div>
+
+            {/* Slide indicators */}
+            <div className="flex items-center gap-3 mt-6">
+              {heroSlides.map((slide, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className="flex items-center gap-2 group"
+                >
+                  <div
+                    className="h-1.5 rounded-full transition-all duration-500"
+                    style={{
+                      width: current === i ? "32px" : "12px",
+                      backgroundColor: current === i ? "hsl(var(--primary))" : "hsl(var(--border))",
+                    }}
+                  />
+                  {current === i && (
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-primary">
+                      {slide.label}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

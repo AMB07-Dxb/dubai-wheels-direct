@@ -29,7 +29,7 @@ const HowItWorks = () => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section className="py-28 bg-muted/30 relative overflow-hidden">
+    <section className="py-28 bg-background relative overflow-hidden">
       <div className="container relative">
         <div className="text-center mb-20">
           <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">How It Works</p>
@@ -51,14 +51,16 @@ const HowItWorks = () => {
               <div
                 className="rounded-3xl p-10 transition-all duration-500 border bg-background"
                 style={{
-                  borderColor: hovered === i ? "hsl(0 85% 50% / 0.25)" : "hsl(0 0% 92%)",
-                  boxShadow: hovered === i ? "0 25px 60px -15px rgba(220,38,38,0.1)" : "0 2px 8px rgba(0,0,0,0.04)",
+                  borderColor: hovered === i ? "hsl(var(--primary) / 0.25)" : "hsl(var(--border))",
+                  boxShadow: hovered === i ? "0 25px 60px -15px hsl(var(--primary) / 0.1)" : "0 2px 8px rgba(0,0,0,0.04)",
                   transform: hovered === i ? "translateY(-10px)" : "translateY(0)",
                 }}
               >
-                <div className="w-20 h-20 rounded-2xl bg-primary/8 flex items-center justify-center mx-auto mb-8 relative transition-colors duration-300"
-                  style={{ backgroundColor: hovered === i ? "hsl(0 85% 50% / 0.12)" : "hsl(0 85% 50% / 0.06)" }}>
-                  <s.icon className={`w-8 h-8 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-primary/60"}`} />
+                <div
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 relative transition-colors duration-300"
+                  style={{ backgroundColor: hovered === i ? "hsl(var(--primary) / 0.12)" : "hsl(var(--muted))" }}
+                >
+                  <s.icon className={`w-8 h-8 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-muted-foreground"}`} />
                   <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shadow-lg">{s.step}</span>
                 </div>
 

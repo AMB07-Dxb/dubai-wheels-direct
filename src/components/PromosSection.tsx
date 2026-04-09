@@ -26,7 +26,7 @@ const promos = [
 ];
 
 const PromosSection = () => (
-  <section id="promos" className="section-padding bg-background">
+  <section id="promos" className="section-padding bg-muted/30">
     <div className="container">
       <div className="text-center mb-16">
         <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Special Offers</p>
