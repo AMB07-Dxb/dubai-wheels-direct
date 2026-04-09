@@ -29,9 +29,9 @@ const Navbar = () => {
         ? "bg-background/95 backdrop-blur-xl shadow-sm border-b border-border"
         : "bg-background/80 backdrop-blur-md"
     }`}>
-      <div className="container flex items-center justify-between h-14 md:h-16">
+      <div className="container flex items-center justify-between h-24 md:h-28">
         <Link to="/" className="flex items-center">
-          <img src={logo} alt="Al Emad Rent A Car" className="h-20 md:h-24 w-auto" />
+          <img src={logo} alt="Al Emad Rent A Car" className="h-36 md:h-44 w-auto" />
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
