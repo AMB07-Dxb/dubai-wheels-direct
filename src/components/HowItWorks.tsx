@@ -1,83 +1,150 @@
 import { useState } from "react";
-import { Search, CreditCard, Car } from "lucide-react";
+import { Truck, Car, HeadphonesIcon, Wrench, Clock, CreditCard, Shield, Settings2, ChevronRight } from "lucide-react";
+import gwagonTop from "@/assets/gwagon-top.png";
 
-const steps = [
+const items = [
   {
-    icon: Search,
-    step: "01",
-    title: "Browse Our Fleet",
-    short: "Explore vehicles at transparent prices.",
-    full: "Choose from 45+ vehicles across economy, sedan, SUV, and luxury categories. Filter by brand, price, or type. Every car shows daily, weekly, and monthly rates upfront — no hidden fees.",
-  },
-  {
-    icon: CreditCard,
-    step: "02",
-    title: "Book Your Car",
-    short: "Pick your plan and confirm instantly.",
-    full: "Select daily, weekly, or monthly rental. Provide your documents and preferred pickup location. Our team processes your request within minutes via WhatsApp or phone.",
+    icon: Truck,
+    title: "Drop-off & Pick-up",
+    desc: "Count on our experts to deliver your selected vehicle and pick it up when your rental ends. We serve all over Dubai and Abu Dhabi.",
   },
   {
     icon: Car,
-    step: "03",
-    title: "Pick Up or We Deliver",
-    short: "Free delivery anywhere in Dubai.",
-    full: "Collect from our JLT office or we deliver to your hotel, airport, or home — completely free within Dubai. All vehicles are cleaned, fueled, and inspected before handover.",
+    title: "Wide Selection of Vehicles",
+    desc: "Choose from 900+ vehicles across economy, sedan, SUV, and luxury categories. Whether you need a compact city car or a premium SUV, we have it all.",
+  },
+  {
+    icon: HeadphonesIcon,
+    title: "Excellent Customer Service",
+    desc: "Our dedicated support team is available 24/7 via phone, WhatsApp, and email. We ensure every rental experience exceeds your expectations.",
+  },
+  {
+    icon: Wrench,
+    title: "Well-Maintained Cars",
+    desc: "Every vehicle undergoes rigorous inspections and regular servicing. We guarantee clean, fully-fueled cars with zero mechanical issues.",
+  },
+];
+
+const itemsRight = [
+  {
+    icon: Clock,
+    title: "Faster Processing",
+    desc: "Get behind the wheel in under 30 minutes. Our streamlined booking process ensures minimal paperwork and maximum convenience.",
+  },
+  {
+    icon: CreditCard,
+    title: "No Extra Booking Charge",
+    desc: "The price you see is the price you pay. No hidden fees, no surprise charges. We believe in complete transparency with our customers.",
+  },
+  {
+    icon: Shield,
+    title: "Full Insurance Coverage",
+    desc: "Drive with complete peace of mind. All our vehicles come with comprehensive insurance coverage included in your rental price.",
+  },
+  {
+    icon: Settings2,
+    title: "Zero Maintenance Costs",
+    desc: "Forget about service bills. All maintenance, oil changes, and tire rotations are on us throughout your entire rental period.",
   },
 ];
 
 const HowItWorks = () => {
-  const [hovered, setHovered] = useState<number | null>(null);
+  const [openLeft, setOpenLeft] = useState<number | null>(null);
+  const [openRight, setOpenRight] = useState<number | null>(null);
 
   return (
-    <section className="py-28 bg-background relative overflow-hidden">
-      <div className="container relative">
-        <div className="text-center mb-20">
-          <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">How It Works</p>
-          <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground">Book in 3 Easy Steps</h2>
-        </div>
+    <section className="py-24 bg-background">
+      <div className="container">
+        <h2 className="text-3xl md:text-5xl font-display font-bold text-foreground text-center mb-20">
+          Why Choose Al Emad?
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto">
-          {steps.map((s, i) => (
-            <div
-              key={s.step}
-              className="relative group cursor-pointer"
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-14 left-[60%] w-[80%] border-t-2 border-dashed border-border" />
-              )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+          {/* Left Column */}
+          <div className="space-y-1">
+            {items.map((item, i) => (
+              <AccordionRow
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                desc={item.desc}
+                isOpen={openLeft === i}
+                onClick={() => setOpenLeft(openLeft === i ? null : i)}
+                align="left"
+              />
+            ))}
+          </div>
 
-              <div
-                className="rounded-3xl p-10 transition-all duration-500 border bg-background"
-                style={{
-                  borderColor: hovered === i ? "hsl(var(--primary) / 0.25)" : "hsl(var(--border))",
-                  boxShadow: hovered === i ? "0 25px 60px -15px hsl(var(--primary) / 0.1)" : "0 2px 8px rgba(0,0,0,0.04)",
-                  transform: hovered === i ? "translateY(-10px)" : "translateY(0)",
-                }}
-              >
-                <div
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 relative transition-colors duration-300"
-                  style={{ backgroundColor: hovered === i ? "hsl(var(--primary) / 0.12)" : "hsl(var(--muted))" }}
-                >
-                  <s.icon className={`w-8 h-8 transition-colors duration-300 ${hovered === i ? "text-primary" : "text-muted-foreground"}`} />
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shadow-lg">{s.step}</span>
-                </div>
+          {/* Center: Car Image */}
+          <div className="hidden lg:flex items-center justify-center relative">
+            <div className="w-72 h-72 rounded-full bg-primary/10 absolute" />
+            <img
+              src={gwagonTop}
+              alt="G-Wagon top view"
+              className="relative z-10 w-80 h-auto object-contain drop-shadow-2xl"
+              loading="lazy"
+              width={768}
+              height={1024}
+            />
+          </div>
 
-                <h3 className="text-lg font-semibold text-foreground mb-3 font-sans text-center">{s.title}</h3>
-
-                <div className="text-center overflow-hidden transition-all duration-500" style={{ maxHeight: hovered === i ? "200px" : "48px" }}>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {hovered === i ? s.full : s.short}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Right Column */}
+          <div className="space-y-1">
+            {itemsRight.map((item, i) => (
+              <AccordionRow
+                key={item.title}
+                icon={item.icon}
+                title={item.title}
+                desc={item.desc}
+                isOpen={openRight === i}
+                onClick={() => setOpenRight(openRight === i ? null : i)}
+                align="right"
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 };
+
+const AccordionRow = ({
+  icon: Icon,
+  title,
+  desc,
+  isOpen,
+  onClick,
+  align,
+}: {
+  icon: React.ElementType;
+  title: string;
+  desc: string;
+  isOpen: boolean;
+  onClick: () => void;
+  align: "left" | "right";
+}) => (
+  <div className="border-b border-border">
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-4 py-5 px-2 hover:bg-muted/30 transition-colors rounded-lg group"
+    >
+      <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+        <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+      </div>
+      <span className="text-[15px] font-semibold text-foreground flex-1 text-left">{title}</span>
+      <ChevronRight
+        className={`w-4 h-4 text-muted-foreground transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+      />
+    </button>
+    <div
+      className="overflow-hidden transition-all duration-300"
+      style={{ maxHeight: isOpen ? "200px" : "0px", opacity: isOpen ? 1 : 0 }}
+    >
+      <p className="text-sm text-muted-foreground leading-relaxed px-2 pb-5 pl-16">
+        {desc}
+      </p>
+    </div>
+  </div>
+);
 
 export default HowItWorks;
