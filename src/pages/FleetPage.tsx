@@ -135,36 +135,40 @@ const FleetPage = () => {
       <section className="section-padding">
         <div className="container">
           <div className="flex gap-8">
-            <FleetFilters
-              filters={filters}
-              onChange={setFilters}
-              brands={brands}
-              totalResults={filtered.length}
-            />
+            {/* Desktop sidebar filters — hidden on mobile */}
+            <div className="hidden md:block">
+              <FleetFilters
+                filters={filters}
+                onChange={setFilters}
+                brands={brands}
+                totalResults={filtered.length}
+              />
+            </div>
 
             <div className="flex-1 min-w-0">
               {/* Sort bar */}
               <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
                 <div className="flex items-center gap-2">
-                  {isMobile && (
+                  {/* Mobile sheet filters */}
+                  <div className="md:hidden">
                     <FleetFilters
                       filters={filters}
                       onChange={setFilters}
                       brands={brands}
                       totalResults={filtered.length}
                     />
-                  )}
+                  </div>
                   <p className="text-sm text-muted-foreground">{filtered.length} vehicles</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground hidden sm:inline">Sort by:</span>
+                <div className="flex items-center gap-2 overflow-x-auto">
+                  <ArrowUpDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <span className="text-xs text-muted-foreground hidden sm:inline shrink-0">Sort by:</span>
                   <div className="flex gap-1.5">
                     {(Object.keys(sortLabels) as SortOption[]).map((key) => (
                       <button
                         key={key}
                         onClick={() => setSortBy(key)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                           sortBy === key
                             ? "bg-primary text-primary-foreground shadow-sm"
                             : "bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80"
