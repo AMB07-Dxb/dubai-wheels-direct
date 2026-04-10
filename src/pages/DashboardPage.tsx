@@ -1,20 +1,25 @@
-import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Car, FileText, CreditCard, AlertTriangle, Navigation, User,
-  LogOut, ChevronRight, Download, Clock, CheckCircle, XCircle
+  LogOut, Download, CheckCircle, XCircle
 } from "lucide-react";
 import {
   isLoggedIn, getStoredCustomer, erpLogout,
-  type ERPCustomer, type ERPRental, type ERPInvoice, type ERPPayment, type ERPFine, type ERPSalik
+  type ERPCustomer, type ERPRental, type ERPInvoice,
+  type ERPPayment, type ERPFine, type ERPSalik
 } from "@/services/erpApi";
+import {
+  useCustomerRentals, useCustomerInvoices, useCustomerPayments,
+  useCustomerFines, useCustomerSalik, useCustomerProfile,
+} from "@/hooks/useErpData";
 
-// Demo data — will be replaced by ERP API calls when connected
+// Fallback demo data — shown when ERP is not connected
 const demoCustomer: ERPCustomer = {
   id: "1", name: "Ahmed Al Rashid", email: "ahmed@example.com", phone: "+971 52 413 6205",
   licenseNo: "DXB-123456", emiratesId: "784-****-*****-1", avatarUrl: "",
@@ -81,25 +86,28 @@ const SummaryCard = ({ icon: Icon, label, value, sub }: { icon: React.ElementTyp
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const customer = getStoredCustomer() || demoCustomer;
 
-  // In production, replace demo data with ERP API calls:
-  // const { data: rentals } = useQuery({ queryKey: ["rentals"], queryFn: fetchRentals });
-  const rentals = demoRentals;
-  const invoices = demoInvoices;
-  const payments = demoPayments;
-  const fines = demoFines;
-  const salik = demoSalik;
+  // React Query hooks with demo fallbacks
+  const { data: profileData } = useCustomerProfile();
+  const { data: rentalsData, isLoading: rentalsLoading } = useCustomerRentals();
+  const { data: invoicesData } = useCustomerInvoices();
+  const { data: paymentsData } = useCustomerPayments();
+  const { data: finesData } = useCustomerFines();
+  const { data: salikData } = useCustomerSalik();
 
-  const activeRentals = rentals.filter(r => r.status === "active").length;
-  const pendingFines = fines.filter(f => f.status === "unpaid").reduce((s, f) => s + f.amount, 0);
-  const unpaidInvoices = invoices.filter(i => i.status === "pending" || i.status === "overdue").length;
+  const customer = profileData || getStoredCustomer() || demoCustomer;
+  const rentals = rentalsData || demoRentals;
+  const invoices = invoicesData || demoInvoices;
+  const payments = paymentsData || demoPayments;
+  const fines = finesData || demoFines;
+  const salik = salikData || demoSalik;
+
+  const activeRentals = rentals.filter((r) => r.status === "active").length;
+  const pendingFines = fines.filter((f) => f.status === "unpaid").reduce((s, f) => s + f.amount, 0);
+  const unpaidInvoices = invoices.filter((i) => i.status === "pending" || i.status === "overdue").length;
   const totalSalik = salik.reduce((s, c) => s + c.amount, 0);
 
-  const handleLogout = () => {
-    erpLogout();
-    navigate("/");
-  };
+  const handleLogout = () => { erpLogout(); navigate("/"); };
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -112,7 +120,7 @@ const DashboardPage = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
-                {customer.name.split(" ").map(n => n[0]).join("")}
+                {customer.name.split(" ").map((n) => n[0]).join("")}
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-display font-bold text-foreground">Welcome, {customer.name.split(" ")[0]}</h1>
@@ -127,7 +135,7 @@ const DashboardPage = () => {
           {/* Summary Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <SummaryCard icon={Car} label="Active Rentals" value={String(activeRentals)} sub={`${rentals.length} total`} />
-            <SummaryCard icon={AlertTriangle} label="Pending Fines" value={`AED ${pendingFines}`} sub={`${fines.filter(f => f.status === "unpaid").length} fines`} />
+            <SummaryCard icon={AlertTriangle} label="Pending Fines" value={`AED ${pendingFines}`} sub={`${fines.filter((f) => f.status === "unpaid").length} fines`} />
             <SummaryCard icon={FileText} label="Unpaid Invoices" value={String(unpaidInvoices)} />
             <SummaryCard icon={Navigation} label="Salik This Month" value={`AED ${totalSalik}`} sub={`${salik.length} trips`} />
           </div>
@@ -143,10 +151,9 @@ const DashboardPage = () => {
               <TabsTrigger value="profile" className="rounded-lg gap-1.5 text-xs sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"><User className="w-4 h-4" /> Profile</TabsTrigger>
             </TabsList>
 
-            {/* Rentals */}
             <TabsContent value="rentals">
               <div className="space-y-4">
-                {rentals.map(r => (
+                {rentals.map((r) => (
                   <div key={r.id} className="bg-background rounded-2xl border border-border p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <img src={r.carImage} alt={r.carName} className="w-28 h-20 object-contain rounded-xl bg-muted/50 p-2" />
                     <div className="flex-1 min-w-0">
@@ -166,7 +173,6 @@ const DashboardPage = () => {
               </div>
             </TabsContent>
 
-            {/* Invoices */}
             <TabsContent value="invoices">
               <div className="bg-background rounded-2xl border border-border overflow-hidden">
                 <div className="overflow-x-auto">
@@ -179,7 +185,7 @@ const DashboardPage = () => {
                       <th className="text-center p-4 font-medium text-muted-foreground">Status</th>
                     </tr></thead>
                     <tbody>
-                      {invoices.map(inv => (
+                      {invoices.map((inv) => (
                         <tr key={inv.id} className="border-b border-border last:border-0 hover:bg-muted/20">
                           <td className="p-4 font-medium text-foreground">{inv.invoiceNo}</td>
                           <td className="p-4 text-muted-foreground">{inv.date}</td>
@@ -194,7 +200,6 @@ const DashboardPage = () => {
               </div>
             </TabsContent>
 
-            {/* Payments */}
             <TabsContent value="payments">
               <div className="bg-background rounded-2xl border border-border overflow-hidden">
                 <div className="overflow-x-auto">
@@ -207,7 +212,7 @@ const DashboardPage = () => {
                       <th className="text-right p-4 font-medium text-muted-foreground">Amount</th>
                     </tr></thead>
                     <tbody>
-                      {payments.map(p => (
+                      {payments.map((p) => (
                         <tr key={p.id} className="border-b border-border last:border-0 hover:bg-muted/20">
                           <td className="p-4 text-muted-foreground">{p.date}</td>
                           <td className="p-4 font-medium text-foreground">{p.reference}</td>
@@ -222,10 +227,9 @@ const DashboardPage = () => {
               </div>
             </TabsContent>
 
-            {/* Fines */}
             <TabsContent value="fines">
               <div className="space-y-4">
-                {fines.map(f => (
+                {fines.map((f) => (
                   <div key={f.id} className="bg-background rounded-2xl border border-border p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${f.status === "unpaid" ? "bg-red-500/10" : "bg-green-500/10"}`}>
                       {f.status === "unpaid" ? <XCircle className="w-6 h-6 text-red-500" /> : <CheckCircle className="w-6 h-6 text-green-500" />}
@@ -244,7 +248,6 @@ const DashboardPage = () => {
               </div>
             </TabsContent>
 
-            {/* Salik */}
             <TabsContent value="salik">
               <div className="bg-background rounded-2xl border border-border overflow-hidden">
                 <div className="overflow-x-auto">
@@ -257,7 +260,7 @@ const DashboardPage = () => {
                       <th className="text-right p-4 font-medium text-muted-foreground">Amount</th>
                     </tr></thead>
                     <tbody>
-                      {salik.map(s => (
+                      {salik.map((s) => (
                         <tr key={s.id} className="border-b border-border last:border-0 hover:bg-muted/20">
                           <td className="p-4 text-muted-foreground">{s.date}</td>
                           <td className="p-4 font-medium text-foreground">{s.gate}</td>
@@ -272,7 +275,6 @@ const DashboardPage = () => {
               </div>
             </TabsContent>
 
-            {/* Profile */}
             <TabsContent value="profile">
               <div className="bg-background rounded-2xl border border-border p-6 max-w-lg">
                 <h3 className="text-lg font-semibold text-foreground mb-6">Personal Information</h3>
