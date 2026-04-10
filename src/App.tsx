@@ -10,6 +10,8 @@ import RewardsPage from "./pages/RewardsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import ContactPage from "./pages/ContactPage";
 import SpecialOffersPage from "./pages/SpecialOffersPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import FloatingCTA from "./components/FloatingCTA";
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/fleet" element={<FleetPage />} />
           <Route path="/fleet/:id" element={<CarDetailPage />} />
           <Route path="/special-offers" element={<SpecialOffersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:id" element={<BlogPostPage />} />
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/documents" element={<DocumentsPage />} />
           <Route path="/contact" element={<ContactPage />} />

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactPage = () => {
@@ -66,6 +67,11 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Contact Al Emad Rent A Car Dubai | 24/7 Support"
+        description="Contact Al Emad Rent A Car Dubai. Call +971 4 557 3386, WhatsApp us, or visit our JLT office. 24/7 customer support for car rentals."
+        canonical="https://dubai-wheels-direct.lovable.app/contact"
+      />
       <Navbar />
 
       {/* Hero */}
