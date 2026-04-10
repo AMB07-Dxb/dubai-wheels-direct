@@ -207,7 +207,8 @@ export const siteConfig: SiteConfig = {
 
   footerLinks: [
     { label: "Our Fleet", href: "/fleet" },
-    { label: "Rewards", href: "/rewards" },
+    { label: "Special Offers", href: "/special-offers" },
+    { label: "Blog", href: "/blog" },
     { label: "Documents", href: "/documents" },
     { label: "Contact", href: "/contact" },
   ],
