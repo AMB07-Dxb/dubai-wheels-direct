@@ -26,7 +26,7 @@ const CarDetailPage = () => {
 
   const carImages = car.images.length > 0 ? car.images : [car.image];
   const similar = allCars.filter(c => c.category === car.category && c.id !== car.id).slice(0, 4);
-  const whatsappLink = `https://wa.me/971545251241?text=${encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`)}`;
+  const whatsappLink = `https://wa.me/971524136205?text=${encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`)}`;
 
   return (
     <div className="min-h-screen bg-background">

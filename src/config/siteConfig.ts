@@ -123,8 +123,8 @@ export const siteConfig: SiteConfig = {
   },
 
   whatsapp: {
-    link: "https://wa.me/971545251241?text=Hi%2C%20I%27m%20interested%20in%20renting%20a%20car.%20Can%20you%20provide%20more%20details%3F",
-    displayNumber: "+971 54 525 1241",
+    link: "https://wa.me/971524136205?text=Hi%2C%20I%27m%20interested%20in%20renting%20a%20car.%20Can%20you%20provide%20more%20details%3F",
+    displayNumber: "+971 52 413 6205",
   },
 
   callNow: {
