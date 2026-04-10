@@ -8,7 +8,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
         <div>
           <Link to="/">
-            <div className="bg-muted/50 rounded-lg px-2 py-1 w-fit">
+            <div className="rounded-lg px-2 py-1 w-fit">
               <img src={logo} alt={siteConfig.branding.companyName} className="h-10 md:h-12 w-auto mb-0 object-contain" />
             </div>
           </Link>
