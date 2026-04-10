@@ -40,7 +40,7 @@ const Navbar = () => {
       }`}>
         <div className="container flex items-center justify-between h-14 md:h-16">
           <Link to="/" className="flex items-center -ml-2">
-            <div className="bg-muted/50 rounded-lg px-2 py-1">
+            <div className="rounded-lg px-2 py-1">
               <img src={logo} alt="Al Emad Rent A Car" className="h-10 md:h-12 w-auto object-contain" />
             </div>
           </Link>
