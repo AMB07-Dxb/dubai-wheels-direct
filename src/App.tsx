@@ -12,6 +12,7 @@ import ContactPage from "./pages/ContactPage";
 import SpecialOffersPage from "./pages/SpecialOffersPage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
+import FloatingCTA from "./components/FloatingCTA";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <FloatingCTA />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/fleet" element={<FleetPage />} />
