@@ -102,7 +102,7 @@ const FleetPage = () => {
         <div className="container relative z-10">
           <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Our Fleet</p>
           <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-3">Find Your Perfect Ride</h1>
-          <p className="text-muted-foreground max-w-lg mb-4">Browse our complete collection of {allCars.length}+ vehicles.</p>
+          <p className="text-muted-foreground max-w-lg mb-4">Browse our complete collection of 900+ vehicles.</p>
 
           {(locationParam || pickupParam || returnParam) && (
             <div className="flex flex-wrap items-center gap-3 mt-2">

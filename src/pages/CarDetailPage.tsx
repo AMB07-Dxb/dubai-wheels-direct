@@ -26,7 +26,7 @@ const CarDetailPage = () => {
 
   const carImages = car.images.length > 0 ? car.images : [car.image];
   const similar = allCars.filter(c => c.category === car.category && c.id !== car.id).slice(0, 4);
-  const whatsappMsg = encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`);
+  const whatsappLink = `https://wa.me/971545251241?text=${encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`)}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,12 +103,12 @@ const CarDetailPage = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-              <a href={`https://wa.me/97145573386?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button size="lg" className="w-full bg-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,38%)] text-white gap-3 rounded-2xl text-base font-bold h-16 shadow-lg shadow-[hsl(142,70%,45%)]/25 hover:shadow-xl hover:shadow-[hsl(142,70%,45%)]/30 transition-all duration-300 hover:scale-[1.02]">
                   <MessageCircle className="w-6 h-6" /> WhatsApp Now
                 </Button>
               </a>
-              <a href={`https://wa.me/97145573386?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex-1">
                 <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90 gap-3 rounded-2xl text-base font-bold h-16 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:scale-[1.02]">
                   <CalendarCheck className="w-6 h-6" /> Book Now
                 </Button>

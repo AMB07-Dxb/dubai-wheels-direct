@@ -19,7 +19,7 @@ const ContactSection = () => (
       </div>
 
       <div className="text-center">
-        <a href="https://wa.me/97145573386" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/971545251241?text=Hi%2C%20I%27m%20interested%20in%20renting%20a%20car.%20Can%20you%20provide%20more%20details%3F" target="_blank" rel="noopener noreferrer">
           <Button size="lg" className="bg-[hsl(142,70%,45%)] text-primary-foreground hover:bg-[hsl(142,70%,40%)] text-base px-10 gap-2 shadow-lg shadow-[hsl(142,70%,45%)]/20">
             <MessageCircle className="w-5 h-5" /> Chat on WhatsApp
           </Button>
