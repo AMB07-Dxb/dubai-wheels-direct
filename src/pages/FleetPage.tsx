@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { allCars, categories, brands } from "@/data/cars";
-import { Users, Fuel, Settings2, Car, MapPin, Calendar } from "lucide-react";
+import { Users, Fuel, Settings2, Car, MapPin, Calendar, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
@@ -9,6 +9,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FleetFilters, { type Filters } from "@/components/FleetFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+type SortOption = "cheapest" | "expensive" | "newest" | "popular";
+
+const sortLabels: Record<SortOption, string> = {
+  cheapest: "Cheapest",
+  expensive: "Most Expensive",
+  newest: "Newest",
+  popular: "Most Popular",
+};
 
 const FleetPage = () => {
   const [searchParams] = useSearchParams();
@@ -27,8 +36,10 @@ const FleetPage = () => {
     features: [],
   });
 
+  const [sortBy, setSortBy] = useState<SortOption>("popular");
+
   const filtered = useMemo(() => {
-    return allCars.filter((c) => {
+    let cars = allCars.filter((c) => {
       if (filters.category !== "All" && c.category !== filters.category) return false;
       if (filters.brand !== "All" && c.brand !== filters.brand) return false;
       if (c.daily < filters.dailyRange[0] || c.daily > filters.dailyRange[1]) return false;
@@ -48,19 +59,51 @@ const FleetPage = () => {
       }
       return true;
     });
-  }, [filters]);
+
+    // Sort
+    switch (sortBy) {
+      case "cheapest":
+        cars = [...cars].sort((a, b) => a.daily - b.daily);
+        break;
+      case "expensive":
+        cars = [...cars].sort((a, b) => b.daily - a.daily);
+        break;
+      case "newest":
+        cars = [...cars].sort((a, b) => b.year - a.year);
+        break;
+      case "popular":
+        // In-stock first, then by category order
+        cars = [...cars].sort((a, b) => {
+          if (a.inStock !== b.inStock) return a.inStock ? -1 : 1;
+          return 0;
+        });
+        break;
+    }
+
+    return cars;
+  }, [filters, sortBy]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="pt-28 pb-8 bg-muted/30">
-        <div className="container">
+      {/* Hero with banner */}
+      <section className="pt-28 pb-8 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="https://www.caryaati.com/erps/images/website/slider_banners/car_pages_banner_1_804.png"
+            alt="Fleet Banner"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
+        </div>
+
+        <div className="container relative z-10">
           <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Our Fleet</p>
           <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-3">Find Your Perfect Ride</h1>
           <p className="text-muted-foreground max-w-lg mb-4">Browse our complete collection of {allCars.length}+ vehicles.</p>
 
-          {/* Booking info from home page */}
           {(locationParam || pickupParam || returnParam) && (
             <div className="flex flex-wrap items-center gap-3 mt-2">
               {locationParam && (
@@ -86,7 +129,6 @@ const FleetPage = () => {
       <section className="section-padding">
         <div className="container">
           <div className="flex gap-8">
-            {/* Filters */}
             <FleetFilters
               filters={filters}
               onChange={setFilters}
@@ -94,20 +136,40 @@ const FleetPage = () => {
               totalResults={filtered.length}
             />
 
-            {/* Grid */}
             <div className="flex-1 min-w-0">
-              {/* Mobile filter trigger row */}
-              {isMobile && (
-                <div className="flex items-center justify-between mb-6">
+              {/* Sort bar */}
+              <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+                <div className="flex items-center gap-2">
+                  {isMobile && (
+                    <FleetFilters
+                      filters={filters}
+                      onChange={setFilters}
+                      brands={brands}
+                      totalResults={filtered.length}
+                    />
+                  )}
                   <p className="text-sm text-muted-foreground">{filtered.length} vehicles</p>
-                  <FleetFilters
-                    filters={filters}
-                    onChange={setFilters}
-                    brands={brands}
-                    totalResults={filtered.length}
-                  />
                 </div>
-              )}
+                <div className="flex items-center gap-2">
+                  <ArrowUpDown className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground hidden sm:inline">Sort by:</span>
+                  <div className="flex gap-1.5">
+                    {(Object.keys(sortLabels) as SortOption[]).map((key) => (
+                      <button
+                        key={key}
+                        onClick={() => setSortBy(key)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          sortBy === key
+                            ? "bg-primary text-primary-foreground shadow-sm"
+                            : "bg-muted text-muted-foreground hover:text-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {sortLabels[key]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filtered.map((car) => (
@@ -123,6 +185,11 @@ const FleetPage = () => {
                         <span className="absolute top-3 left-3 bg-foreground text-background text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wide uppercase">
                           {car.category}
                         </span>
+                        {car.inStock ? (
+                          <span className="absolute top-3 right-3 bg-emerald-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">In Stock</span>
+                        ) : (
+                          <span className="absolute top-3 right-3 bg-destructive text-destructive-foreground text-[10px] font-bold px-2.5 py-1 rounded-full">Out of Stock</span>
+                        )}
                       </div>
                       <div className="p-5">
                         <h3 className="text-base font-bold text-primary mb-2 font-sans">{car.name}</h3>
