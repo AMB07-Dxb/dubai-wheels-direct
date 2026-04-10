@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { allCars } from "@/data/cars";
-import { Users, Briefcase, Settings2, Fuel, ArrowLeft, MessageCircle, CalendarCheck, DoorOpen } from "lucide-react";
+import { Users, Briefcase, Settings2, Fuel, ArrowLeft, MessageCircle, CalendarCheck, DoorOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,6 +9,7 @@ import Footer from "@/components/Footer";
 const CarDetailPage = () => {
   const { id } = useParams();
   const car = allCars.find(c => c.id === id);
+  const [activeImage, setActiveImage] = useState(0);
 
   if (!car) {
     return (
@@ -22,6 +24,7 @@ const CarDetailPage = () => {
     );
   }
 
+  const carImages = car.images.length > 0 ? car.images : [car.image];
   const similar = allCars.filter(c => c.category === car.category && c.id !== car.id).slice(0, 4);
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`);
 
@@ -35,18 +38,59 @@ const CarDetailPage = () => {
             <ArrowLeft className="w-4 h-4" /> Back to Fleet
           </Link>
 
-          {/* Car Name & Category */}
-          <div className="mb-8">
-            <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mt-4">{car.name}</h1>
-            <p className="text-muted-foreground mt-1">{car.brand} • {car.year} • {car.transmission} • {car.fuel}</p>
+          <div className="mb-8 flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">{car.category}</span>
+                {!car.inStock && (
+                  <span className="bg-destructive text-destructive-foreground text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">Out of Stock</span>
+                )}
+                {car.inStock && (
+                  <span className="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">In Stock</span>
+                )}
+              </div>
+              <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">{car.name}</h1>
+              <p className="text-muted-foreground mt-1">{car.brand} • {car.year} • {car.transmission} • {car.fuel}</p>
+            </div>
           </div>
 
-          {/* Image + Prices + CTAs */}
+          {/* Image Gallery + Prices + CTAs */}
           <div className="bg-muted/20 rounded-3xl border border-border p-6 md:p-10 mb-10">
-            <div className="flex items-center justify-center mb-8">
-              <img src={car.image} alt={car.name} className="w-full max-w-2xl object-contain h-[300px]" />
+            {/* Image Gallery */}
+            <div className="relative flex items-center justify-center mb-8">
+              <img src={carImages[activeImage]} alt={car.name} className="w-full max-w-2xl object-contain h-[300px]" />
+              {carImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setActiveImage(i => (i - 1 + carImages.length) % carImages.length)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background border border-border rounded-full p-2 transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-foreground" />
+                  </button>
+                  <button
+                    onClick={() => setActiveImage(i => (i + 1) % carImages.length)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background border border-border rounded-full p-2 transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5 text-foreground" />
+                  </button>
+                </>
+              )}
             </div>
+
+            {/* Thumbnail strip */}
+            {carImages.length > 1 && (
+              <div className="flex items-center justify-center gap-3 mb-8">
+                {carImages.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                    className={`w-16 h-12 rounded-lg border-2 overflow-hidden transition-all ${i === activeImage ? "border-primary ring-2 ring-primary/20" : "border-border opacity-60 hover:opacity-100"}`}
+                  >
+                    <img src={img} alt={`${car.name} view ${i + 1}`} className="w-full h-full object-contain p-1" />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Price Cards */}
             <div className="grid grid-cols-3 gap-4 mb-8 max-w-xl mx-auto">
@@ -60,7 +104,7 @@ const CarDetailPage = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
               <a href={`https://wa.me/97145573386?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white gap-2 rounded-xl text-sm font-semibold h-13">
+                <Button size="lg" className="w-full bg-[hsl(142,70%,49%)] hover:bg-[hsl(142,70%,42%)] text-white gap-2 rounded-xl text-sm font-semibold h-13">
                   <MessageCircle className="w-5 h-5" /> WhatsApp Now
                 </Button>
               </a>
@@ -72,9 +116,8 @@ const CarDetailPage = () => {
             </div>
           </div>
 
-          {/* Content Grid: Description + General Info */}
+          {/* Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-            {/* Left: Description */}
             <div className="lg:col-span-3">
               <h2 className="text-2xl font-display font-bold text-primary mb-4 uppercase">About the {car.name}</h2>
               <div className="w-16 h-1 bg-primary rounded-full mb-6" />
@@ -88,7 +131,6 @@ const CarDetailPage = () => {
               </div>
             </div>
 
-            {/* Right: General Information */}
             <div className="lg:col-span-2">
               <h2 className="text-2xl font-display font-bold text-primary mb-6">General Information</h2>
               <div className="border border-border rounded-2xl overflow-hidden">
@@ -101,10 +143,10 @@ const CarDetailPage = () => {
                 <InfoRow label="HORSEPOWER" value={String(car.horsepower)} />
                 <InfoRow label="ENGINE" value={car.engine} />
                 <InfoRow label="YEAR" value={String(car.year)} />
+                <InfoRow label="AVAILABILITY" value={car.inStock ? "In Stock" : "Out of Stock"} />
                 <InfoRow label="MODEL" value={car.name.split(' ').slice(1, -1).join(' ')} last />
               </div>
 
-              {/* Car Features */}
               <h2 className="text-2xl font-display font-bold text-primary mt-8 mb-6">Car Features</h2>
               <div className="border border-border rounded-2xl overflow-hidden">
                 {car.features.map((f, i) => (
@@ -116,7 +158,6 @@ const CarDetailPage = () => {
         </div>
       </section>
 
-      {/* Similar Cars */}
       {similar.length > 0 && (
         <section className="py-16">
           <div className="container">
