@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SEOHead from "@/components/SEOHead";
 import FleetFilters, { type Filters } from "@/components/FleetFilters";
-import { useIsMobile } from "@/hooks/use-mobile";
+
 
 type SortOption = "cheapest" | "expensive" | "newest" | "popular";
 
@@ -22,7 +22,7 @@ const sortLabels: Record<SortOption, string> = {
 
 const FleetPage = () => {
   const [searchParams] = useSearchParams();
-  const isMobile = useIsMobile();
+  
 
   const locationParam = searchParams.get("location") || "";
   const pickupParam = searchParams.get("pickup");
