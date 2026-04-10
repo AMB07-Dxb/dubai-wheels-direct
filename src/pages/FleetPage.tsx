@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 import FleetFilters, { type Filters } from "@/components/FleetFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -85,6 +86,11 @@ const FleetPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Rent a Car in Dubai | 900+ Vehicles | Al Emad Rent A Car"
+        description="Browse 900+ cars for rent in Dubai. Economy, sedan, SUV & luxury vehicles with daily, weekly & monthly rates. Free insurance & delivery included."
+        canonical="https://dubai-wheels-direct.lovable.app/fleet"
+      />
       <Navbar />
 
       {/* Hero with banner */}

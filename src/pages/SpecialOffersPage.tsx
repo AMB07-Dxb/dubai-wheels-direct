@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SEOHead from "@/components/SEOHead";
 
 const featured = allCars.filter(c =>
   ["kia-pegas-2025", "mazda-3-2025", "hyundai-creta-2022", "kia-k5-2023", "peugeot-3008-2025", "infiniti-q50-2023"].includes(c.id)
@@ -11,6 +12,11 @@ const featured = allCars.filter(c =>
 
 const SpecialOffersPage = () => (
   <div className="min-h-screen bg-background">
+    <SEOHead
+      title="Special Offers on Car Rental Dubai | Al Emad Rent A Car"
+      description="Save big with Al Emad's special car rental offers in Dubai. Discounted daily, weekly & monthly rates on popular vehicles. Limited time deals!"
+      canonical="https://dubai-wheels-direct.lovable.app/special-offers"
+    />
     <Navbar />
 
     {/* Hero Banner with gradient overlay */}
