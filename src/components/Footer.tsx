@@ -8,7 +8,9 @@ const Footer = () => (
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-10">
         <div>
           <Link to="/">
-            <img src={logo} alt={siteConfig.branding.companyName} className="h-10 md:h-12 w-auto mb-3 object-contain" />
+            <div className="bg-muted/50 rounded-lg px-2 py-1 w-fit">
+              <img src={logo} alt={siteConfig.branding.companyName} className="h-10 md:h-12 w-auto mb-0 object-contain" />
+            </div>
           </Link>
           <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{siteConfig.branding.tagline}</p>
         </div>
