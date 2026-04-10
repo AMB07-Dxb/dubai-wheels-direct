@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { blogPosts } from "@/data/blogs";
+import { useBlogPosts } from "@/hooks/useErpData";
 
 const BlogPreviewSection = () => {
-  const featured = blogPosts.slice(0, 3);
+  const { data: posts = [] } = useBlogPosts();
+  const featured = posts.slice(0, 3);
 
   return (
     <section className="section-padding">
@@ -17,7 +18,7 @@ const BlogPreviewSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {featured.map((post) => (
-            <Link key={post.id} to={`/blog/${post.id}`} className="group block">
+            <Link key={post.id} to={`/blog/${post.slug || post.id}`} className="group block">
               <article className="bg-background rounded-2xl overflow-hidden border border-border hover:border-primary/20 hover:shadow-xl transition-all duration-300 hover-lift h-full flex flex-col">
                 <div className="relative h-48 overflow-hidden">
                   <img
@@ -29,7 +30,7 @@ const BlogPreviewSection = () => {
                     height={200}
                   />
                   <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">
-                    {post.category}
+                    {post.tags?.[0] || "Blog"}
                   </span>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
