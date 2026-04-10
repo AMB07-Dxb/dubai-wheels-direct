@@ -73,7 +73,7 @@ export function useFleetCategories() {
     queryKey: ["fleet", "categories"],
     queryFn: fetchCategories,
     ...defaultOptions,
-    placeholderData: staticCategories,
+    placeholderData: [...staticCategories] as string[],
   });
 }
 
