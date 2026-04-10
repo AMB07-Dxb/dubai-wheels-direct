@@ -40,7 +40,7 @@ const Navbar = () => {
       }`}>
         <div className="container flex items-center justify-between h-14 md:h-16">
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="Al Emad Rent A Car" className="h-12 md:h-14 w-auto" />
+            <img src={logo} alt="Al Emad Rent A Car" className="h-16 md:h-20 w-auto object-contain" />
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
