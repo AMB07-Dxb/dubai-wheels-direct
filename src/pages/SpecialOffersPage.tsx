@@ -13,8 +13,20 @@ const SpecialOffersPage = () => (
   <div className="min-h-screen bg-background">
     <Navbar />
 
-    <section className="pt-28 pb-14 bg-muted/30">
-      <div className="container">
+    {/* Hero Banner with gradient overlay */}
+    <section className="pt-28 pb-14 relative overflow-hidden">
+      {/* Background banner image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://www.caryaati.com/erps/images/website/slider_banners/slider_banners_6_244.png"
+          alt="Special Offers Banner"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
+      </div>
+
+      <div className="container relative z-10">
         <p className="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Limited Time Deals</p>
         <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-3">Special Offers</h1>
         <p className="text-muted-foreground max-w-lg">Handpicked vehicles at the best rates. Book now and save on your next rental.</p>
@@ -33,6 +45,9 @@ const SpecialOffersPage = () => (
                   <span className="absolute top-4 right-4 bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase flex items-center gap-1">
                     <Star className="w-3 h-3" /> Special Offer
                   </span>
+                  {!car.inStock && (
+                    <span className="absolute bottom-4 left-4 bg-destructive text-destructive-foreground text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase">Out of Stock</span>
+                  )}
                 </div>
                 <div className="p-6">
                   <h3 className="text-lg font-bold text-primary mb-3 font-sans">{car.name}</h3>
