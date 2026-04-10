@@ -3,10 +3,15 @@ import heroBg from "@/assets/hero-bg.jpg";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { siteConfig } from "@/config/siteConfig";
+import { useSiteConfig } from "@/hooks/useErpData";
+import { siteConfig as fallbackConfig } from "@/config/siteConfig";
 
 const HeroSection = () => {
-  const slides = siteConfig.heroSlides;
+  const { data: config } = useSiteConfig();
+  const siteConfig = { ...fallbackConfig, ...(config as any) };
+  const slides = siteConfig.heroSlides || fallbackConfig.heroSlides;
+  const waLink = siteConfig.whatsapp?.link || fallbackConfig.whatsapp.link;
+
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -59,7 +64,7 @@ const HeroSection = () => {
                   Browse Fleet <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
-              <a href={siteConfig.whatsapp.link} target="_blank" rel="noopener noreferrer">
+              <a href={waLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="bg-white text-foreground hover:bg-white/90 text-base px-8 gap-2 w-full sm:w-auto h-13 rounded-xl shadow-lg font-semibold">
                   <MessageCircle className="w-5 h-5" /> WhatsApp Us
                 </Button>
@@ -77,7 +82,7 @@ const HeroSection = () => {
           </div>
 
           <div className="hidden lg:flex items-center justify-center relative h-[450px] translate-y-10">
-            {slides.map((slide, i) => (
+            {slides.map((slide: any, i: number) => (
               <img
                 key={i}
                 src={slide.image}
@@ -103,7 +108,7 @@ const HeroSection = () => {
       </button>
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
-        {slides.map((_, i) => (
+        {slides.map((_: any, i: number) => (
           <button key={i} onClick={() => goTo(i)} className="group relative">
             <div className="h-1.5 rounded-full transition-all duration-500" style={{ width: current === i ? "40px" : "12px", backgroundColor: current === i ? "hsl(var(--primary))" : "rgba(255,255,255,0.4)" }} />
           </button>

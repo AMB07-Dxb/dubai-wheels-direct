@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useFleetCars, useFleetBrands } from "@/hooks/useErpData";
-import { brands as staticBrands } from "@/data/cars";
 import { Users, Fuel, Settings2, Car, MapPin, Calendar, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -24,7 +23,7 @@ const sortLabels: Record<SortOption, string> = {
 const FleetPage = () => {
   const [searchParams] = useSearchParams();
   const { data: cars = [], isLoading } = useFleetCars();
-  const { data: brands = staticBrands } = useFleetBrands();
+  const { data: brands = [] } = useFleetBrands();
 
   const locationParam = searchParams.get("location") || "";
   const pickupParam = searchParams.get("pickup");

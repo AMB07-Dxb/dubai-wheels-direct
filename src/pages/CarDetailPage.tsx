@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useFleetCars } from "@/hooks/useErpData";
+import { useFleetCars, useSiteConfig } from "@/hooks/useErpData";
+import { siteConfig as fallbackConfig } from "@/config/siteConfig";
 import { Users, Briefcase, Settings2, Fuel, ArrowLeft, MessageCircle, CalendarCheck, DoorOpen, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { siteConfig } from "@/config/siteConfig";
 
 const CarDetailPage = () => {
   const { id } = useParams();
   const { data: allCars = [], isLoading } = useFleetCars();
+  const { data: config } = useSiteConfig();
+  const siteConfig = { ...fallbackConfig, ...(config as any) };
   const car = allCars.find((c) => c.id === id);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -47,7 +49,8 @@ const CarDetailPage = () => {
 
   const carImages = car.images.length > 0 ? car.images : [car.image];
   const similar = allCars.filter((c) => c.category === car.category && c.id !== car.id).slice(0, 4);
-  const whatsappLink = `${siteConfig.whatsapp.link.split("?")[0]}?text=${encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`)}`;
+  const waBase = siteConfig.whatsapp?.link?.split("?")[0] || fallbackConfig.whatsapp.link.split("?")[0];
+  const whatsappLink = `${waBase}?text=${encodeURIComponent(`Hi, I'm interested in renting the ${car.name}. Can you provide more details?`)}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -74,7 +77,6 @@ const CarDetailPage = () => {
             </div>
           </div>
 
-          {/* Image Gallery + Prices + CTAs */}
           <div className="bg-muted/20 rounded-3xl border border-border p-6 md:p-10 mb-10">
             <div className="relative flex items-center justify-center mb-8">
               <img src={carImages[activeImage]} alt={car.name} className="w-full max-w-2xl object-contain h-[300px]" />
@@ -125,7 +127,6 @@ const CarDetailPage = () => {
             </div>
           </div>
 
-          {/* Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
             <div className="lg:col-span-3">
               <h2 className="text-2xl font-display font-bold text-primary mb-4 uppercase">About the {car.name}</h2>
