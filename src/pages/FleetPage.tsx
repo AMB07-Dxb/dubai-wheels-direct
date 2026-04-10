@@ -23,7 +23,7 @@ const sortLabels: Record<SortOption, string> = {
 const FleetPage = () => {
   const [searchParams] = useSearchParams();
   const { data: cars = [], isLoading } = useFleetCars();
-  const { data: brands = staticBrands } = useFleetBrands();
+  const { data: brands = [] } = useFleetBrands();
 
   const locationParam = searchParams.get("location") || "";
   const pickupParam = searchParams.get("pickup");
