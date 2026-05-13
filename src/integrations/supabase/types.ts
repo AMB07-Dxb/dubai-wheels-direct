@@ -116,6 +116,51 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_slides: {
+        Row: {
+          category: string
+          created_at: string
+          daily: number
+          description: string
+          id: string
+          image: string
+          monthly: number
+          name: string
+          position: number
+          subtitle: string
+          updated_at: string
+          weekly: number
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          daily?: number
+          description: string
+          id?: string
+          image: string
+          monthly?: number
+          name: string
+          position?: number
+          subtitle: string
+          updated_at?: string
+          weekly?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          daily?: number
+          description?: string
+          id?: string
+          image?: string
+          monthly?: number
+          name?: string
+          position?: number
+          subtitle?: string
+          updated_at?: string
+          weekly?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

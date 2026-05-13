@@ -4,13 +4,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSiteConfig } from "@/hooks/useErpData";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { siteConfig as fallbackConfig } from "@/config/siteConfig";
 
 const HeroSection = () => {
   const { data: config } = useSiteConfig();
   const siteConfig = { ...fallbackConfig, ...(config as any) };
-  const slides = siteConfig.heroSlides || fallbackConfig.heroSlides;
   const waLink = siteConfig.whatsapp?.link || fallbackConfig.whatsapp.link;
+
+  const { data: dbSlides } = useQuery({
+    queryKey: ["hero_slides"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("hero_slides").select("*").order("position", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60_000,
+  });
+
+  const slides: any[] = (dbSlides && dbSlides.length > 0) ? dbSlides : (siteConfig.heroSlides || fallbackConfig.heroSlides);
+
 
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -72,11 +86,11 @@ const HeroSection = () => {
             </div>
 
             <div className="flex items-center gap-6 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-5 w-fit border border-white/10">
-              <PricePill label="Daily" price="50" />
+              <PricePill label="Daily" price={slides[current].daily ? String(slides[current].daily) : "50"} />
               <div className="w-px h-10 bg-white/20" />
-              <PricePill label="Weekly" price="315" />
+              <PricePill label="Weekly" price={slides[current].weekly ? String(slides[current].weekly) : "315"} />
               <div className="w-px h-10 bg-white/20" />
-              <PricePill label="Monthly" price="990" />
+              <PricePill label="Monthly" price={slides[current].monthly ? String(slides[current].monthly) : "990"} />
             </div>
             <p className="text-[11px] mt-2 text-white/40 ml-1">Starting from • 5% VAT applicable</p>
           </div>
