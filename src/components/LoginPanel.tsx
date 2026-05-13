@@ -4,6 +4,8 @@ import { X, Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const countryCodes = [
@@ -29,13 +31,39 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with erpLogin() / erpSignup() API calls
-    // For now, store demo customer and navigate to dashboard
-    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: "", phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+    if (submitting) return;
+
+    // ERP admin login detection
+    if (isLogin && email.trim().toLowerCase() === "admin@alemad.ae") {
+      setSubmitting(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("admin-cars", {
+          body: { username: email.trim().toLowerCase(), password, action: "login" },
+        });
+        if (error || (data as any)?.error) {
+          toast.error("Invalid admin credentials");
+        } else {
+          localStorage.setItem("erp_admin", JSON.stringify({ username: email.trim().toLowerCase(), password }));
+          toast.success("Welcome to the ERP Admin Portal");
+          onClose();
+          navigate("/admin");
+        }
+      } catch (err: any) {
+        toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email, phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
     onClose();
     navigate("/dashboard");
   };
@@ -136,7 +164,7 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
               <Label htmlFor="panel-email" className="text-sm font-medium text-foreground">Email Address</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="panel-email" type="email" placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
+                <Input id="panel-email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
               </div>
             </div>
 
@@ -152,6 +180,8 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
                 <Input
                   id="panel-password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10 h-12 rounded-xl border-border"
                 />
@@ -180,8 +210,8 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
-              {isLogin ? "Sign In" : "Create Account"}
+            <Button type="submit" disabled={submitting} className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
+              {submitting ? "Signing in…" : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>
 
