@@ -429,7 +429,132 @@ const AdminPage = () => {
             )}
           </>
         )}
+
+        {tab === "hero" && (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-2xl font-display font-bold text-foreground flex items-center gap-2"><ImageIcon className="h-6 w-6" />Hero Slides</h1>
+                <p className="text-sm text-muted-foreground mt-1">Manage the cars shown on the homepage hero. {slides.length} active slide(s).</p>
+              </div>
+              <Button onClick={() => setEditingSlide({ position: slides.length })}><Plus className="h-4 w-4 mr-1.5" />Add Slide</Button>
+            </div>
+
+            {slides.length === 0 ? (
+              <div className="text-center py-20 bg-background border border-dashed border-border rounded-xl">
+                <ImageIcon className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No custom slides yet. The homepage will show defaults until you add slides.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {slides.map((s) => (
+                  <div key={s.id} className="bg-background border border-border rounded-xl p-4 flex gap-4">
+                    <img src={s.image} alt={s.name} className="w-32 h-24 object-contain rounded-lg bg-muted/40" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="font-semibold text-foreground truncate">{s.name}</div>
+                        <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full">{s.category}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{s.subtitle}</div>
+                      <div className="text-[11px] text-muted-foreground mt-2">AED {s.daily}/d · {s.weekly}/w · {s.monthly}/m</div>
+                      <div className="flex gap-1 mt-2 -ml-2">
+                        <Button variant="ghost" size="sm" onClick={() => setEditingSlide(s)}><Pencil className="h-3.5 w-3.5 mr-1" />Edit</Button>
+                        <Button variant="ghost" size="sm" onClick={() => removeSlide(s.id)}><Trash2 className="h-3.5 w-3.5 mr-1 text-destructive" />Delete</Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </main>
+
+      {editingSlide && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => !savingSlide && setEditingSlide(null)}>
+          <div className="bg-background rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-5 border-b border-border sticky top-0 bg-background z-10">
+              <h2 className="text-lg font-semibold">{editingSlide.id ? "Edit Hero Slide" : "Add Hero Slide"}</h2>
+              <button onClick={() => setEditingSlide(null)} className="p-1 hover:bg-muted rounded"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Pick a car from your fleet</Label>
+                <select
+                  value=""
+                  onChange={(e) => e.target.value && pickFleetCar(e.target.value)}
+                  className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="">— Select a car (auto-fills bio, image, pricing) —</option>
+                  {fleetCars.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name} {c.year ? `(${c.year})` : ""} · AED {c.daily}/day</option>
+                  ))}
+                </select>
+                {generatingBio && (
+                  <p className="text-[11px] text-primary flex items-center gap-1.5"><Loader2 className="h-3 w-3 animate-spin" /> Generating bio with AI…</p>
+                )}
+              </div>
+
+              {editingSlide.image && (
+                <div className="flex items-center gap-3 p-3 bg-muted/40 rounded-lg">
+                  <img src={editingSlide.image} alt="preview" className="h-20 w-28 object-contain bg-background rounded" />
+                  <div className="text-xs text-muted-foreground">
+                    <div className="font-semibold text-foreground">{editingSlide.name}</div>
+                    <div>AED {editingSlide.daily}/day · {editingSlide.weekly}/week · {editingSlide.monthly}/month</div>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Category Badge</Label>
+                  <Input value={editingSlide.category || ""} onChange={(e) => setEditingSlide({ ...editingSlide, category: e.target.value })} placeholder="Featured" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Position</Label>
+                  <Input type="number" value={editingSlide.position ?? 0} onChange={(e) => setEditingSlide({ ...editingSlide, position: Number(e.target.value) })} />
+                </div>
+                <div className="space-y-1.5 md:col-span-2">
+                  <Label className="text-xs flex items-center gap-1.5">
+                    Tagline (subtitle) <Sparkles className="h-3 w-3 text-primary" />
+                  </Label>
+                  <Input value={editingSlide.subtitle || ""} onChange={(e) => setEditingSlide({ ...editingSlide, subtitle: e.target.value })} placeholder="e.g. Premium comfort, every kilometer" />
+                </div>
+                <div className="space-y-1.5 md:col-span-2">
+                  <Label className="text-xs flex items-center gap-1.5">
+                    Description (bio) <Sparkles className="h-3 w-3 text-primary" />
+                  </Label>
+                  <Textarea rows={3} value={editingSlide.description || ""} onChange={(e) => setEditingSlide({ ...editingSlide, description: e.target.value })} />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Daily (AED)</Label>
+                  <Input type="number" value={editingSlide.daily ?? 0} onChange={(e) => setEditingSlide({ ...editingSlide, daily: Number(e.target.value) })} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Weekly (AED)</Label>
+                  <Input type="number" value={editingSlide.weekly ?? 0} onChange={(e) => setEditingSlide({ ...editingSlide, weekly: Number(e.target.value) })} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Monthly (AED)</Label>
+                  <Input type="number" value={editingSlide.monthly ?? 0} onChange={(e) => setEditingSlide({ ...editingSlide, monthly: Number(e.target.value) })} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Image URL</Label>
+                  <Input value={editingSlide.image || ""} onChange={(e) => setEditingSlide({ ...editingSlide, image: e.target.value })} placeholder="https://…" />
+                </div>
+              </div>
+            </div>
+            <div className="p-5 border-t border-border flex justify-end gap-2 sticky bottom-0 bg-background">
+              <Button variant="outline" onClick={() => setEditingSlide(null)} disabled={savingSlide}>Cancel</Button>
+              <Button onClick={saveSlide} disabled={savingSlide || generatingBio}>
+                {savingSlide && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+                {editingSlide.id ? "Save Changes" : "Add Slide"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {editing && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => !saving && setEditing(null)}>
