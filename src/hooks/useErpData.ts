@@ -56,12 +56,53 @@ const mapErpCar = (c: ERPCar): CarData => ({
   slug: c.slug,
 });
 
+/** Map admin (Supabase) car row to local CarData */
+const mapAdminCar = (c: any): CarData => {
+  const catRaw = String(c.category || "sedan").toLowerCase();
+  const catMap: Record<string, CarData["category"]> = {
+    sedan: "Sedan", suv: "SUV", luxury: "Luxury", economy: "Economy",
+    sports: "Luxury", "special-offers": "Sedan",
+  };
+  return {
+    id: c.id,
+    name: c.name,
+    brand: c.brand,
+    year: c.year,
+    image: c.image || "",
+    images: Array.isArray(c.images) && c.images.length ? c.images : (c.image ? [c.image] : []),
+    daily: Number(c.daily) || 0,
+    weekly: Number(c.weekly) || 0,
+    monthly: Number(c.monthly) || 0,
+    seats: c.seats ?? 5,
+    doors: c.doors ?? 4,
+    luggage: 2,
+    category: catMap[catRaw] || "Sedan",
+    transmission: c.transmission || "Automatic",
+    fuel: c.fuel || "Petrol",
+    bodyType: catMap[catRaw] || "Sedan",
+    engine: "",
+    horsepower: 0,
+    description: c.description || "",
+    features: Array.isArray(c.features) ? c.features : [],
+    inStock: c.in_stock ?? true,
+    erpId: c.id,
+    slug: c.id,
+    // @ts-expect-error — extra flag used by special-offers filtering
+    rawCategory: catRaw,
+  };
+};
+
 export function useFleetCars() {
   return useQuery<CarData[]>({
     queryKey: ["fleet", "cars"],
     queryFn: async () => {
-      const res = await fetchCars();
-      return res.cars.map(mapErpCar);
+      const [erpRes, adminRes] = await Promise.all([
+        fetchCars().catch(() => ({ cars: [] as ERPCar[] })),
+        supabaseClient.from("cars").select("*").order("created_at", { ascending: false }),
+      ]);
+      const adminCars = (adminRes.data || []).map(mapAdminCar);
+      const erpCars = erpRes.cars.map(mapErpCar);
+      return [...adminCars, ...erpCars];
     },
     ...defaultOptions,
     placeholderData: allCars,
