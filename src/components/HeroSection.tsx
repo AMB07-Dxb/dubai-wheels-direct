@@ -86,11 +86,11 @@ const HeroSection = () => {
             </div>
 
             <div className="flex items-center gap-6 bg-white/10 backdrop-blur-md rounded-2xl px-6 py-5 w-fit border border-white/10">
-              <PricePill label="Daily" price="50" />
+              <PricePill label="Daily" price={slides[current].daily ? String(slides[current].daily) : "50"} />
               <div className="w-px h-10 bg-white/20" />
-              <PricePill label="Weekly" price="315" />
+              <PricePill label="Weekly" price={slides[current].weekly ? String(slides[current].weekly) : "315"} />
               <div className="w-px h-10 bg-white/20" />
-              <PricePill label="Monthly" price="990" />
+              <PricePill label="Monthly" price={slides[current].monthly ? String(slides[current].monthly) : "990"} />
             </div>
             <p className="text-[11px] mt-2 text-white/40 ml-1">Starting from • 5% VAT applicable</p>
           </div>
