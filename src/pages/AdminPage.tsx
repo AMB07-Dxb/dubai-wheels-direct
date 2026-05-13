@@ -40,6 +40,19 @@ type Customer = {
   created_at: string;
 };
 
+type HeroSlide = {
+  id: string;
+  name: string;
+  category: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  daily: number;
+  weekly: number;
+  monthly: number;
+  position: number;
+};
+
 const CATEGORIES = ["sedan", "suv", "luxury", "economy", "sports", "special-offers"];
 
 const empty: Omit<Car, "id"> = {
