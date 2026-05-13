@@ -180,6 +180,8 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
                 <Input
                   id="panel-password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10 h-12 rounded-xl border-border"
                 />
