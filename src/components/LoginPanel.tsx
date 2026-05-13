@@ -164,7 +164,7 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
               <Label htmlFor="panel-email" className="text-sm font-medium text-foreground">Email Address</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="panel-email" type="email" placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
+                <Input id="panel-email" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
               </div>
             </div>
 
