@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const countryCodes = [
@@ -24,11 +26,39 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [emailOrUser, setEmailOrUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: "", phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+    if (submitting) return;
+
+    // ERP admin login detection
+    if (isLogin && emailOrUser.trim() === "AlemadJLT") {
+      setSubmitting(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("admin-cars", {
+          body: { username: emailOrUser.trim(), password, action: "login" },
+        });
+        if (error || (data as any)?.error) {
+          toast.error("Invalid admin credentials");
+        } else {
+          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim(), password }));
+          toast.success("Welcome to the ERP Admin Portal");
+          navigate("/admin");
+        }
+      } catch (err: any) {
+        toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    // Regular customer login (mock)
+    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: emailOrUser, phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
     navigate("/dashboard");
   };
 
