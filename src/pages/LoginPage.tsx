@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const countryCodes = [
@@ -24,11 +26,39 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [emailOrUser, setEmailOrUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: "", phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+    if (submitting) return;
+
+    // ERP admin login detection
+    if (isLogin && emailOrUser.trim() === "AlemadJLT") {
+      setSubmitting(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("admin-cars", {
+          body: { username: emailOrUser.trim(), password, action: "login" },
+        });
+        if (error || (data as any)?.error) {
+          toast.error("Invalid admin credentials");
+        } else {
+          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim(), password }));
+          toast.success("Welcome to the ERP Admin Portal");
+          navigate("/admin");
+        }
+      } catch (err: any) {
+        toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    // Regular customer login (mock)
+    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: emailOrUser, phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
     navigate("/dashboard");
   };
 
@@ -107,12 +137,22 @@ const LoginPage = () => {
               </>
             )}
 
-            {/* Email */}
+            {/* Email or Username */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground">Email Address</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                {isLogin ? "Email or Username" : "Email Address"}
+              </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="email" type="email" placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
+                <Input
+                  id="email"
+                  type="text"
+                  value={emailOrUser}
+                  onChange={(e) => setEmailOrUser(e.target.value)}
+                  placeholder={isLogin ? "you@example.com or admin username" : "you@example.com"}
+                  className="pl-10 h-12 rounded-xl border-border"
+                  autoComplete="username"
+                />
               </div>
             </div>
 
@@ -129,8 +169,11 @@ const LoginPage = () => {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10 h-12 rounded-xl border-border"
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
@@ -157,10 +200,19 @@ const LoginPage = () => {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
-              {isLogin ? "Sign In" : "Create Account"}
+            <Button type="submit" disabled={submitting} className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
+              {submitting ? "Signing in…" : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>
+
+          {isLogin && (
+            <div className="mt-5 p-3 rounded-xl bg-muted/60 border border-border flex items-start gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                <strong className="text-foreground">ERP Admin?</strong> Sign in with your admin username and password to access the Admin Portal.
+              </p>
+            </div>
+          )}
 
           <p className="text-center text-xs text-muted-foreground mt-6">
             {isLogin ? "Don't have an account? " : "Already have an account? "}

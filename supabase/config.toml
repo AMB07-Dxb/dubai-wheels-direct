@@ -1,0 +1,7 @@
+project_id = "lewayfgqncfccfacdhlf"
+
+[functions.chat]
+verify_jwt = false
+
+[functions.admin-cars]
+verify_jwt = false
