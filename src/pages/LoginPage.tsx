@@ -40,7 +40,7 @@ const LoginPage = () => {
       setSubmitting(true);
       try {
         const { data, error } = await supabase.functions.invoke("admin-cars", {
-          body: { username: emailOrUser.trim(), password, action: "login" },
+          body: { username: emailOrUser.trim().toLowerCase(), password, action: "login" },
         });
         if (error || (data as any)?.error) {
           toast.error("Invalid admin credentials");
