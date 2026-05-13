@@ -36,7 +36,7 @@ const LoginPage = () => {
     if (submitting) return;
 
     // ERP admin login detection
-    if (isLogin && emailOrUser.trim() === "AlemadJLT") {
+    if (isLogin && emailOrUser.trim().toLowerCase() === "admin@alemad.ae") {
       setSubmitting(true);
       try {
         const { data, error } = await supabase.functions.invoke("admin-cars", {
