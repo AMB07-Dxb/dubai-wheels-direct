@@ -313,6 +313,12 @@ const AdminPage = () => {
           >
             <Users className="h-4 w-4 inline mr-1.5" />Customers
           </button>
+          <button
+            onClick={() => setTab("hero")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${tab === "hero" ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+          >
+            <ImageIcon className="h-4 w-4 inline mr-1.5" />Hero Slides
+          </button>
         </div>
 
         {tab === "fleet" && (
