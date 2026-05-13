@@ -200,10 +200,19 @@ const LoginPage = () => {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
-              {isLogin ? "Sign In" : "Create Account"}
+            <Button type="submit" disabled={submitting} className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
+              {submitting ? "Signing in…" : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>
+
+          {isLogin && (
+            <div className="mt-5 p-3 rounded-xl bg-muted/60 border border-border flex items-start gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                <strong className="text-foreground">ERP Admin?</strong> Sign in with your admin username and password to access the Admin Portal.
+              </p>
+            </div>
+          )}
 
           <p className="text-center text-xs text-muted-foreground mt-6">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
