@@ -27,10 +27,17 @@ interface LoginPanelProps {
   onClose: () => void;
 }
 
+const hashPassword = async (pw: string) => {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+};
+
 const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -57,6 +64,38 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
         }
       } catch (err: any) {
         toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    // Customer signup → save to database
+    if (!isLogin) {
+      if (!name.trim() || !email.trim() || !password) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+      setSubmitting(true);
+      try {
+        const password_hash = await hashPassword(password);
+        const { error } = await supabase.from("customers").insert({
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim() || null,
+          country_code: countryCode,
+          password_hash,
+        });
+        if (error) {
+          toast.error(error.message.includes("duplicate") ? "An account with this email already exists" : error.message);
+          return;
+        }
+        toast.success("Account created!");
+        localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name, email, phone, licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+        onClose();
+        navigate("/dashboard");
+      } catch (err: any) {
+        toast.error(err.message || "Signup failed");
       } finally {
         setSubmitting(false);
       }
@@ -133,7 +172,7 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
                   <Label htmlFor="panel-name" className="text-sm font-medium text-foreground">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="panel-name" placeholder="Enter your full name" className="pl-10 h-12 rounded-xl border-border" />
+                    <Input id="panel-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your full name" className="pl-10 h-12 rounded-xl border-border" />
                   </div>
                 </div>
 
@@ -153,7 +192,7 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
                     </select>
                     <div className="relative flex-1">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input id="panel-phone" placeholder="Phone number" className="pl-10 h-12 rounded-xl border-border" />
+                      <Input id="panel-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" className="pl-10 h-12 rounded-xl border-border" />
                     </div>
                   </div>
                 </div>

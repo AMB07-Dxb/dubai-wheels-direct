@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     const { username, password, action, car, id } = body as {
       username?: string;
       password?: string;
-      action: "login" | "create" | "update" | "delete";
+      action: "login" | "create" | "update" | "delete" | "list_customers";
       car?: Record<string, unknown>;
       id?: string;
     };
@@ -60,6 +60,17 @@ Deno.serve(async (req) => {
       const { error } = await supabase.from("cars").delete().eq("id", id);
       if (error) throw error;
       return new Response(JSON.stringify({ ok: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (action === "list_customers") {
+      const { data, error } = await supabase
+        .from("customers")
+        .select("id, name, email, phone, country_code, created_at")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true, customers: data }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
