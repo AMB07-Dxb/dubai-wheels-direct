@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-password",
 };
 
-const ADMIN_USERNAME = "AlemadJLT";
+const ADMIN_USERNAME = "admin@alemad.ae";
 const ADMIN_PASSWORD = "Alemad@123";
 
 Deno.serve(async (req) => {

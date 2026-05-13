@@ -36,16 +36,16 @@ const LoginPage = () => {
     if (submitting) return;
 
     // ERP admin login detection
-    if (isLogin && emailOrUser.trim() === "AlemadJLT") {
+    if (isLogin && emailOrUser.trim().toLowerCase() === "admin@alemad.ae") {
       setSubmitting(true);
       try {
         const { data, error } = await supabase.functions.invoke("admin-cars", {
-          body: { username: emailOrUser.trim(), password, action: "login" },
+          body: { username: emailOrUser.trim().toLowerCase(), password, action: "login" },
         });
         if (error || (data as any)?.error) {
           toast.error("Invalid admin credentials");
         } else {
-          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim(), password }));
+          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim().toLowerCase(), password }));
           toast.success("Welcome to the ERP Admin Portal");
           navigate("/admin");
         }
