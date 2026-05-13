@@ -54,6 +54,19 @@ type HeroSlide = {
 };
 
 const CATEGORIES = ["sedan", "suv", "luxury", "economy", "sports", "special-offers"];
+const ADMIN_EMAIL = "admin@alemad.ae";
+
+const getStoredAdmin = () => {
+  try {
+    const stored = JSON.parse(localStorage.getItem("erp_admin") || "null");
+    const username = String(stored?.username || "").trim().toLowerCase();
+    const password = String(stored?.password || "");
+    if (username !== ADMIN_EMAIL || !password) return null;
+    return { username, password };
+  } catch {
+    return null;
+  }
+};
 
 const empty: Omit<Car, "id"> = {
   name: "", brand: "", model: "", year: new Date().getFullYear(),
@@ -80,12 +93,10 @@ const AdminPage = () => {
   const mainInputRef = useRef<HTMLInputElement>(null);
   const extraInputRef = useRef<HTMLInputElement>(null);
 
-  const creds = (() => {
-    try { return JSON.parse(localStorage.getItem("erp_admin") || "null"); } catch { return null; }
-  })();
+  const creds = getStoredAdmin();
 
   useEffect(() => {
-    if (!creds) { navigate("/login"); return; }
+    if (!creds) { localStorage.removeItem("erp_admin"); navigate("/login"); return; }
     load();
   }, []);
 
@@ -197,10 +208,25 @@ const AdminPage = () => {
   };
 
   const callAdmin = async (body: any) => {
+    const currentCreds = getStoredAdmin();
+    if (!currentCreds) {
+      localStorage.removeItem("erp_admin");
+      navigate("/login");
+      throw new Error("Admin session expired. Please log in again.");
+    }
     const { data, error } = await supabase.functions.invoke("admin-cars", {
-      body: { ...creds, ...body },
+      body: { ...currentCreds, ...body },
     });
-    if (error) throw new Error(error.message);
+    if (error) {
+      let message = error.message;
+      const context = (error as any)?.context;
+      if (context?.status === 401) {
+        localStorage.removeItem("erp_admin");
+        navigate("/login");
+        message = "Admin session expired. Please log in again.";
+      }
+      throw new Error(message);
+    }
     if ((data as any)?.error) throw new Error((data as any).error);
     return data;
   };
