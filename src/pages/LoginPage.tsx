@@ -137,12 +137,22 @@ const LoginPage = () => {
               </>
             )}
 
-            {/* Email */}
+            {/* Email or Username */}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-foreground">Email Address</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                {isLogin ? "Email or Username" : "Email Address"}
+              </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="email" type="email" placeholder="you@example.com" className="pl-10 h-12 rounded-xl border-border" />
+                <Input
+                  id="email"
+                  type="text"
+                  value={emailOrUser}
+                  onChange={(e) => setEmailOrUser(e.target.value)}
+                  placeholder={isLogin ? "you@example.com or admin username" : "you@example.com"}
+                  className="pl-10 h-12 rounded-xl border-border"
+                  autoComplete="username"
+                />
               </div>
             </div>
 
@@ -159,8 +169,11 @@ const LoginPage = () => {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   className="pl-10 pr-10 h-12 rounded-xl border-border"
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
