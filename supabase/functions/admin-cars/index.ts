@@ -14,12 +14,14 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const { username, password, action, car, id } = body as {
+    const { username, password, action, car, id, slide, prompt } = body as {
       username?: string;
       password?: string;
-      action: "login" | "create" | "update" | "delete" | "list_customers";
+      action: string;
       car?: Record<string, unknown>;
       id?: string;
+      slide?: Record<string, unknown>;
+      prompt?: string;
     };
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
