@@ -118,6 +118,7 @@ export type Database = {
       }
       hero_slides: {
         Row: {
+          car_id: string | null
           category: string
           created_at: string
           daily: number
@@ -132,6 +133,7 @@ export type Database = {
           weekly: number
         }
         Insert: {
+          car_id?: string | null
           category?: string
           created_at?: string
           daily?: number
@@ -146,6 +148,7 @@ export type Database = {
           weekly?: number
         }
         Update: {
+          car_id?: string | null
           category?: string
           created_at?: string
           daily?: number
