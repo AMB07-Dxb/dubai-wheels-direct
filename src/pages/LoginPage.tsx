@@ -45,7 +45,7 @@ const LoginPage = () => {
         if (error || (data as any)?.error) {
           toast.error("Invalid admin credentials");
         } else {
-          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim(), password }));
+          localStorage.setItem("erp_admin", JSON.stringify({ username: emailOrUser.trim().toLowerCase(), password }));
           toast.success("Welcome to the ERP Admin Portal");
           navigate("/admin");
         }
