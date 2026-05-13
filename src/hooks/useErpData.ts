@@ -1,63 +1,33 @@
 /**
- * React Query hooks for ERP/CMS data.
- * Each hook fetches from the Caryaati ERP API and falls back to static data on error.
+ * Data hooks for the website.
+ *
+ * The Caryaati ERP integration has been removed. The site is now standalone:
+ *   - Fleet cars come from the Lovable Cloud `cars` table (managed via Admin).
+ *   - Site config, blog posts, FAQs, etc. come from local static data.
+ *   - Customer-dashboard hooks return `undefined` so pages use their demo fallbacks.
  */
 import { useQuery } from "@tanstack/react-query";
-import {
-  fetchCars, fetchSiteConfig, fetchBlogPosts, fetchBlogPost,
-  fetchTestimonials, fetchFAQs, fetchSpecialOffers, fetchRewardsData,
-  fetchRequiredDocuments, fetchLocations, fetchCategories, fetchBrands,
-  fetchDashboardSummary, fetchRentals, fetchInvoices, fetchPayments,
-  fetchFines, fetchSalikCharges, fetchCustomerProfile,
-  type ERPCar, type ERPSiteConfig, type ERPBlogPost, type ERPTestimonial,
-  type ERPFAQ, type ERPSpecialOffer, type ERPRewardsData, type ERPDocument,
-  type ERPLocation, type ERPDashboardSummary, type ERPRental, type ERPInvoice,
-  type ERPPayment, type ERPFine, type ERPSalik, type ERPCustomer,
+import type {
+  ERPSiteConfig, ERPBlogPost, ERPTestimonial, ERPFAQ, ERPSpecialOffer,
+  ERPRewardsData, ERPDocument, ERPLocation, ERPDashboardSummary,
+  ERPRental, ERPInvoice, ERPPayment, ERPFine, ERPSalik, ERPCustomer,
 } from "@/services/erpApi";
-import { allCars, categories as staticCategories, brands as staticBrands, type CarData } from "@/data/cars";
+import {
+  allCars, categories as staticCategories, brands as staticBrands, type CarData,
+} from "@/data/cars";
 import { siteConfig as staticSiteConfig } from "@/config/siteConfig";
 import { blogPosts as staticBlogPosts } from "@/data/blogs";
 import { supabase as supabaseClient } from "@/integrations/supabase/client";
 
-// ── Shared query options ─────────────────────────────────
-
 const defaultOptions = {
-  staleTime: 5 * 60 * 1000,    // 5 min
-  gcTime: 30 * 60 * 1000,      // 30 min cache
-  retry: 1,
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
+  retry: 0,
   refetchOnWindowFocus: false,
 };
 
-// ── Car / Fleet ──────────────────────────────────────────
+// ── Helpers ──────────────────────────────────────────────
 
-/** Map ERP car to local CarData format */
-const mapErpCar = (c: ERPCar): CarData => ({
-  id: c.slug || c.id,
-  name: c.name,
-  brand: c.brand,
-  year: c.year,
-  image: c.image,
-  images: c.images,
-  daily: c.daily,
-  weekly: c.weekly,
-  monthly: c.monthly,
-  seats: c.seats,
-  doors: c.doors,
-  luggage: c.luggage,
-  category: c.category as CarData["category"],
-  transmission: c.transmission,
-  fuel: c.fuel,
-  bodyType: c.bodyType,
-  engine: c.engine,
-  horsepower: c.horsepower,
-  description: c.description,
-  features: c.features,
-  inStock: c.inStock,
-  erpId: c.erpId,
-  slug: c.slug,
-});
-
-/** Map admin (Supabase) car row to local CarData */
 const mapAdminCar = (c: any): CarData => {
   const catRaw = String(c.category || "sedan").toLowerCase();
   const catMap: Record<string, CarData["category"]> = {
@@ -88,204 +58,194 @@ const mapAdminCar = (c: any): CarData => {
     inStock: c.in_stock ?? true,
     erpId: c.id,
     slug: c.id,
-    // @ts-expect-error — extra flag used by special-offers filtering
+    // @ts-expect-error — extra flag used for category filtering
     rawCategory: catRaw,
   };
 };
+
+// ── Fleet (Supabase-backed) ──────────────────────────────
 
 export function useFleetCars() {
   return useQuery<CarData[]>({
     queryKey: ["fleet", "cars"],
     queryFn: async () => {
-      const [erpRes, adminRes] = await Promise.all([
-        fetchCars().catch(() => ({ cars: [] as ERPCar[] })),
-        supabaseClient.from("cars").select("*").order("created_at", { ascending: false }),
-      ]);
-      const adminCars = (adminRes.data || []).map(mapAdminCar);
-      const erpCars = erpRes.cars.map(mapErpCar);
-      return [...adminCars, ...erpCars];
+      const res = await supabaseClient
+        .from("cars")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (res.error) throw res.error;
+      return (res.data || []).map(mapAdminCar);
     },
     ...defaultOptions,
     placeholderData: allCars,
+    initialData: allCars,
   });
 }
 
 export function useFleetCategories() {
   return useQuery<string[]>({
     queryKey: ["fleet", "categories"],
-    queryFn: fetchCategories,
+    queryFn: async () => [...staticCategories] as string[],
     ...defaultOptions,
-    placeholderData: [...staticCategories] as string[],
+    initialData: [...staticCategories] as string[],
   });
 }
 
 export function useFleetBrands() {
   return useQuery<string[]>({
     queryKey: ["fleet", "brands"],
-    queryFn: fetchBrands,
+    queryFn: async () => staticBrands,
     ...defaultOptions,
-    placeholderData: staticBrands,
+    initialData: staticBrands,
   });
 }
 
-// ── Site Config ──────────────────────────────────────────
+// ── Site / CMS (static) ──────────────────────────────────
 
 export function useSiteConfig() {
   return useQuery({
     queryKey: ["siteConfig"],
-    queryFn: fetchSiteConfig,
+    queryFn: async () => staticSiteConfig as unknown as ERPSiteConfig,
     ...defaultOptions,
-    placeholderData: staticSiteConfig as unknown as ERPSiteConfig,
+    initialData: staticSiteConfig as unknown as ERPSiteConfig,
   });
 }
 
-// ── Blog ─────────────────────────────────────────────────
-
 export function useBlogPosts() {
+  const fallback = staticBlogPosts.map((p) => ({
+    id: p.id, slug: p.id, title: p.title, excerpt: p.excerpt,
+    content: p.content || "", image: p.image, author: p.author,
+    date: p.date, readTime: p.readTime, tags: p.tags || [p.category],
+    metaTitle: p.title, metaDescription: p.excerpt,
+  })) as ERPBlogPost[];
   return useQuery<ERPBlogPost[]>({
     queryKey: ["blog", "posts"],
-    queryFn: fetchBlogPosts,
+    queryFn: async () => fallback,
     ...defaultOptions,
-    placeholderData: staticBlogPosts.map((p) => ({
-      id: p.id,
-      slug: p.id,
-      title: p.title,
-      excerpt: p.excerpt,
-      content: p.content || "",
-      image: p.image,
-      author: p.author,
-      date: p.date,
-      readTime: p.readTime,
-      tags: p.tags || [p.category],
-      metaTitle: p.title,
-      metaDescription: p.excerpt,
-    })),
+    initialData: fallback,
   });
 }
 
 export function useBlogPost(slug: string) {
-  return useQuery<ERPBlogPost>({
+  const post = staticBlogPosts.find((p) => p.id === slug);
+  const fallback: ERPBlogPost | undefined = post
+    ? {
+        id: post.id, slug: post.id, title: post.title, excerpt: post.excerpt,
+        content: post.content || "", image: post.image, author: post.author,
+        date: post.date, readTime: post.readTime, tags: post.tags || [post.category],
+        metaTitle: post.title, metaDescription: post.excerpt,
+      }
+    : undefined;
+  return useQuery<ERPBlogPost | undefined>({
     queryKey: ["blog", "post", slug],
-    queryFn: () => fetchBlogPost(slug),
+    queryFn: async () => fallback,
     ...defaultOptions,
     enabled: !!slug,
+    initialData: fallback,
   });
 }
-
-// ── Testimonials ─────────────────────────────────────────
 
 export function useTestimonials() {
   return useQuery<ERPTestimonial[]>({
     queryKey: ["testimonials"],
-    queryFn: fetchTestimonials,
+    queryFn: async () => [],
     ...defaultOptions,
+    initialData: [],
   });
 }
-
-// ── FAQs ─────────────────────────────────────────────────
 
 export function useFAQs() {
   return useQuery<ERPFAQ[]>({
     queryKey: ["faqs"],
-    queryFn: fetchFAQs,
+    queryFn: async () => [],
     ...defaultOptions,
+    initialData: [],
   });
 }
-
-// ── Special Offers ───────────────────────────────────────
 
 export function useSpecialOffers() {
   return useQuery<ERPSpecialOffer[]>({
     queryKey: ["specialOffers"],
-    queryFn: fetchSpecialOffers,
+    queryFn: async () => [],
     ...defaultOptions,
+    initialData: [],
   });
 }
-
-// ── Rewards ──────────────────────────────────────────────
 
 export function useRewardsData() {
-  return useQuery<ERPRewardsData>({
+  return useQuery<ERPRewardsData | undefined>({
     queryKey: ["rewards"],
-    queryFn: fetchRewardsData,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
-// ── Documents ────────────────────────────────────────────
 
 export function useRequiredDocuments() {
   return useQuery<ERPDocument[]>({
     queryKey: ["documents"],
-    queryFn: fetchRequiredDocuments,
+    queryFn: async () => [],
     ...defaultOptions,
+    initialData: [],
   });
 }
-
-// ── Locations ────────────────────────────────────────────
 
 export function useLocations() {
   return useQuery<ERPLocation[]>({
     queryKey: ["locations"],
-    queryFn: fetchLocations,
+    queryFn: async () => [],
     ...defaultOptions,
+    initialData: [],
   });
 }
 
-// ── Customer Dashboard ───────────────────────────────────
+// ── Customer dashboard (no remote source — pages use demo data) ──
 
 export function useDashboardSummary() {
-  return useQuery<ERPDashboardSummary>({
+  return useQuery<ERPDashboardSummary | undefined>({
     queryKey: ["dashboard", "summary"],
-    queryFn: fetchDashboardSummary,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerRentals() {
-  return useQuery<ERPRental[]>({
+  return useQuery<ERPRental[] | undefined>({
     queryKey: ["customer", "rentals"],
-    queryFn: fetchRentals,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerInvoices() {
-  return useQuery<ERPInvoice[]>({
+  return useQuery<ERPInvoice[] | undefined>({
     queryKey: ["customer", "invoices"],
-    queryFn: fetchInvoices,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerPayments() {
-  return useQuery<ERPPayment[]>({
+  return useQuery<ERPPayment[] | undefined>({
     queryKey: ["customer", "payments"],
-    queryFn: fetchPayments,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerFines() {
-  return useQuery<ERPFine[]>({
+  return useQuery<ERPFine[] | undefined>({
     queryKey: ["customer", "fines"],
-    queryFn: fetchFines,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerSalik() {
-  return useQuery<ERPSalik[]>({
+  return useQuery<ERPSalik[] | undefined>({
     queryKey: ["customer", "salik"],
-    queryFn: fetchSalikCharges,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }
-
 export function useCustomerProfile() {
-  return useQuery<ERPCustomer>({
+  return useQuery<ERPCustomer | undefined>({
     queryKey: ["customer", "profile"],
-    queryFn: fetchCustomerProfile,
+    queryFn: async () => undefined,
     ...defaultOptions,
   });
 }

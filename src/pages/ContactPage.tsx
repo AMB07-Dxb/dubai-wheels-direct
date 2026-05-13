@@ -48,11 +48,8 @@ const ContactPage = () => {
 
     setSubmitting(true);
 
-    // TODO: Replace with actual Caryaati ERP API endpoint
-    // POST to your ERP system: https://www.caryaati.com/erps/api/inquiries
-    // Body: { name, email, phone, subject, message, source: "website" }
     try {
-      // Simulate ERP API call — replace this URL with your Caryaati ERP endpoint
+      // Inquiries are simulated — connect to your preferred channel (email/CRM) when ready.
       await new Promise((resolve) => setTimeout(resolve, 1200));
 
       setSubmitted(true);
