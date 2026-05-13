@@ -22,10 +22,17 @@ const countryCodes = [
   { code: "+1", country: "US" },
 ];
 
+const hashPassword = async (pw: string) => {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+};
+
 const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [emailOrUser, setEmailOrUser] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -51,6 +58,37 @@ const LoginPage = () => {
         }
       } catch (err: any) {
         toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    // Customer signup → save to database
+    if (!isLogin) {
+      if (!name.trim() || !emailOrUser.trim() || !password) {
+        toast.error("Please fill in all required fields");
+        return;
+      }
+      setSubmitting(true);
+      try {
+        const password_hash = await hashPassword(password);
+        const { error } = await supabase.from("customers").insert({
+          name: name.trim(),
+          email: emailOrUser.trim().toLowerCase(),
+          phone: phone.trim() || null,
+          country_code: countryCode,
+          password_hash,
+        });
+        if (error) {
+          toast.error(error.message.includes("duplicate") ? "An account with this email already exists" : error.message);
+          return;
+        }
+        toast.success("Account created!");
+        localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name, email: emailOrUser, phone, licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+        navigate("/dashboard");
+      } catch (err: any) {
+        toast.error(err.message || "Signup failed");
       } finally {
         setSubmitting(false);
       }
