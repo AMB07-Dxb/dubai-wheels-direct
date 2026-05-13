@@ -4,13 +4,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSiteConfig } from "@/hooks/useErpData";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { siteConfig as fallbackConfig } from "@/config/siteConfig";
 
 const HeroSection = () => {
   const { data: config } = useSiteConfig();
   const siteConfig = { ...fallbackConfig, ...(config as any) };
-  const slides = siteConfig.heroSlides || fallbackConfig.heroSlides;
   const waLink = siteConfig.whatsapp?.link || fallbackConfig.whatsapp.link;
+
+  const { data: dbSlides } = useQuery({
+    queryKey: ["hero_slides"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("hero_slides").select("*").order("position", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60_000,
+  });
+
+  const slides: any[] = (dbSlides && dbSlides.length > 0) ? dbSlides : (siteConfig.heroSlides || fallbackConfig.heroSlides);
+
 
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
