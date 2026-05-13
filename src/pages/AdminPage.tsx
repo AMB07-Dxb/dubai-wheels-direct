@@ -205,6 +205,47 @@ const AdminPage = () => {
       loadSlides();
     } catch (e: any) { toast.error(e.message); }
   };
+
+  // Sync selected fleet cars → hero_slides (max 4)
+  const [syncingHero, setSyncingHero] = useState(false);
+  const toggleHeroCar = (carId: string) => {
+    const has = slides.some((s) => s.car_id === carId);
+    if (has) {
+      const slide = slides.find((s) => s.car_id === carId);
+      if (slide) removeSlide(slide.id);
+      return;
+    }
+    if (slides.length >= HERO_MAX) {
+      toast.error(`You can only feature up to ${HERO_MAX} cars in the hero banner.`);
+      return;
+    }
+    addCarToHero(carId);
+  };
+
+  const addCarToHero = async (carId: string) => {
+    const c = fleetCars.find((f) => f.id === carId);
+    if (!c) return;
+    setSyncingHero(true);
+    try {
+      const payload = {
+        name: c.name,
+        category: (c.category || "Featured") as string,
+        subtitle: `${c.brand || ""} ${c.name}`.trim(),
+        description: `Experience the ${c.year || ""} ${c.name} — ready for your Dubai journey.`,
+        image: c.image,
+        daily: Number(c.daily) || 0,
+        weekly: Number(c.weekly) || 0,
+        monthly: Number(c.monthly) || 0,
+        position: slides.length,
+        car_id: c.id,
+      };
+      await callAdmin({ action: "hero_create", slide: payload });
+      toast.success(`${c.name} added to hero`);
+      await loadSlides();
+    } catch (e: any) { toast.error(e.message); }
+    finally { setSyncingHero(false); }
+  };
+
   const logout = () => {
     localStorage.removeItem("erp_admin");
     navigate("/");
