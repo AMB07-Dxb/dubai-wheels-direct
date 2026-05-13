@@ -11,7 +11,8 @@ const FEATURED_IDS = ["kia-pegas-2025", "mazda-3-2025", "hyundai-creta-2022", "k
 
 const SpecialOffersPage = () => {
   const { data: allCars = [], isLoading } = useFleetCars();
-  const featured = allCars.filter(c => FEATURED_IDS.includes(c.id));
+  const adminOffers = allCars.filter((c: any) => (c as any).rawCategory === "special-offers");
+  const featured = [...adminOffers, ...allCars.filter(c => FEATURED_IDS.includes(c.id))];
 
   return (
     <div className="min-h-screen bg-background">
