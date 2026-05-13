@@ -31,13 +31,39 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [countryCode, setCountryCode] = useState("+971");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with erpLogin() / erpSignup() API calls
-    // For now, store demo customer and navigate to dashboard
-    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email: "", phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
+    if (submitting) return;
+
+    // ERP admin login detection
+    if (isLogin && email.trim().toLowerCase() === "admin@alemad.ae") {
+      setSubmitting(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("admin-cars", {
+          body: { username: email.trim().toLowerCase(), password, action: "login" },
+        });
+        if (error || (data as any)?.error) {
+          toast.error("Invalid admin credentials");
+        } else {
+          localStorage.setItem("erp_admin", JSON.stringify({ username: email.trim().toLowerCase(), password }));
+          toast.success("Welcome to the ERP Admin Portal");
+          onClose();
+          navigate("/admin");
+        }
+      } catch (err: any) {
+        toast.error(err.message || "Login failed");
+      } finally {
+        setSubmitting(false);
+      }
+      return;
+    }
+
+    localStorage.setItem("erp_customer", JSON.stringify({ id: "1", name: "Customer", email, phone: "", licenseNo: "", emiratesId: "", loyaltyPoints: 0, memberSince: new Date().toISOString() }));
     onClose();
     navigate("/dashboard");
   };
