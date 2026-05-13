@@ -108,6 +108,89 @@ const AdminPage = () => {
     } catch (e: any) { toast.error(e.message); }
   };
 
+  const loadSlides = async () => {
+    const { data, error } = await supabase.from("hero_slides").select("*").order("position", { ascending: true });
+    if (error) { toast.error(error.message); return; }
+    setSlides((data || []) as HeroSlide[]);
+  };
+
+  const pickFleetCar = async (carId: string) => {
+    const c = fleetCars.find((f) => f.id === carId);
+    if (!c) return;
+    setEditingSlide({
+      ...(editingSlide || {}),
+      name: c.name,
+      category: (c.category || "Featured") as string,
+      image: c.image,
+      daily: c.daily,
+      weekly: c.weekly,
+      monthly: c.monthly,
+    });
+    // Auto-generate bio
+    setGeneratingBio(true);
+    try {
+      const data = await callAdmin({
+        action: "generate_bio",
+        prompt: `${c.year || ""} ${c.brand || ""} ${c.name} — ${c.category || ""}, ${c.seats || 5} seats, ${c.transmission || "Automatic"}, ${c.fuel || "Petrol"}.`,
+      });
+      setEditingSlide((prev) => ({
+        ...(prev || {}),
+        name: c.name,
+        category: (c.category || "Featured") as string,
+        image: c.image,
+        daily: c.daily,
+        weekly: c.weekly,
+        monthly: c.monthly,
+        subtitle: (data as any)?.subtitle || `${c.brand} ${c.name}`,
+        description: (data as any)?.description || `Experience the ${c.year || ""} ${c.name} — ready for your Dubai journey.`,
+      }));
+    } catch (e: any) {
+      toast.error(`Bio generation failed: ${e.message}`);
+      setEditingSlide((prev) => ({
+        ...(prev || {}),
+        subtitle: prev?.subtitle || `${c.brand} ${c.name}`,
+        description: prev?.description || `Experience the ${c.year || ""} ${c.name} — ready for your Dubai journey.`,
+      }));
+    } finally {
+      setGeneratingBio(false);
+    }
+  };
+
+  const saveSlide = async () => {
+    if (!editingSlide || !editingSlide.name || !editingSlide.image) {
+      toast.error("Please pick a car first");
+      return;
+    }
+    setSavingSlide(true);
+    try {
+      const payload = {
+        name: editingSlide.name,
+        category: editingSlide.category || "Featured",
+        subtitle: editingSlide.subtitle || editingSlide.name,
+        description: editingSlide.description || "",
+        image: editingSlide.image,
+        daily: Number(editingSlide.daily) || 0,
+        weekly: Number(editingSlide.weekly) || 0,
+        monthly: Number(editingSlide.monthly) || 0,
+        position: Number(editingSlide.position) || 0,
+      };
+      if (editingSlide.id) await callAdmin({ action: "hero_update", id: editingSlide.id, slide: payload });
+      else await callAdmin({ action: "hero_create", slide: payload });
+      toast.success(editingSlide.id ? "Slide updated" : "Slide added");
+      setEditingSlide(null);
+      loadSlides();
+    } catch (e: any) { toast.error(e.message); }
+    finally { setSavingSlide(false); }
+  };
+
+  const removeSlide = async (id: string) => {
+    if (!confirm("Remove this slide from the hero?")) return;
+    try {
+      await callAdmin({ action: "hero_delete", id });
+      toast.success("Removed");
+      loadSlides();
+    } catch (e: any) { toast.error(e.message); }
+  };
   const logout = () => {
     localStorage.removeItem("erp_admin");
     navigate("/");
