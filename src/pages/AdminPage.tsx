@@ -64,9 +64,14 @@ const empty: Omit<Car, "id"> = {
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"fleet" | "customers">("fleet");
+  const [tab, setTab] = useState<"fleet" | "customers" | "hero">("fleet");
   const [cars, setCars] = useState<Car[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
+  const [editingSlide, setEditingSlide] = useState<(Partial<HeroSlide> & { id?: string }) | null>(null);
+  const [generatingBio, setGeneratingBio] = useState(false);
+  const [savingSlide, setSavingSlide] = useState(false);
+  const { data: fleetCars = [] } = useFleetCars();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Car | (Omit<Car, "id"> & { id?: string }) | null>(null);
   const [saving, setSaving] = useState(false);
@@ -86,6 +91,7 @@ const AdminPage = () => {
 
   useEffect(() => {
     if (tab === "customers" && creds) loadCustomers();
+    if (tab === "hero" && creds) loadSlides();
   }, [tab]);
 
   const load = async () => {
