@@ -148,7 +148,7 @@ const LoginPage = () => {
                   <Label htmlFor="name" className="text-sm font-medium text-foreground">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="name" placeholder="Enter your full name" className="pl-10 h-12 rounded-xl border-border" />
+                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your full name" className="pl-10 h-12 rounded-xl border-border" />
                   </div>
                 </div>
 
