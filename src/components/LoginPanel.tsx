@@ -210,8 +210,8 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
-              {isLogin ? "Sign In" : "Create Account"}
+            <Button type="submit" disabled={submitting} className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-sm font-semibold">
+              {submitting ? "Signing in…" : isLogin ? "Sign In" : "Create Account"}
             </Button>
           </form>
 
