@@ -17,6 +17,7 @@ import {
 import { allCars, categories as staticCategories, brands as staticBrands, type CarData } from "@/data/cars";
 import { siteConfig as staticSiteConfig } from "@/config/siteConfig";
 import { blogPosts as staticBlogPosts } from "@/data/blogs";
+import { supabase as supabaseClient } from "@/integrations/supabase/client";
 
 // ── Shared query options ─────────────────────────────────
 
