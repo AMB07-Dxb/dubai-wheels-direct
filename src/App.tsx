@@ -14,8 +14,10 @@ import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 import FloatingCTA from "./components/FloatingCTA";
+import AlEmadAIChat from "./components/AlEmadAIChat";
 
 const queryClient = new QueryClient();
 
@@ -26,10 +28,20 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <FloatingCTA />
+        <AlEmadAIChat />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/fleet" element={<FleetPage />} />
           <Route path="/fleet/:id" element={<CarDetailPage />} />
+          <Route path="/special-offers" element={<SpecialOffersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:id" element={<BlogPostPage />} />
+          <Route path="/rewards" element={<RewardsPage />} />
+          <Route path="/documents" element={<DocumentsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="/special-offers" element={<SpecialOffersPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:id" element={<BlogPostPage />} />
