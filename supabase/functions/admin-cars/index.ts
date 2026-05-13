@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     const { username, password, action, car, id } = body as {
       username?: string;
       password?: string;
-      action: "login" | "create" | "update" | "delete";
+      action: "login" | "create" | "update" | "delete" | "list_customers";
       car?: Record<string, unknown>;
       id?: string;
     };
