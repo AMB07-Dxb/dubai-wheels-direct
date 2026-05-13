@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { LogOut, Plus, Pencil, Trash2, Car as CarIcon, Loader2, X, Upload, Users } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Car as CarIcon, Loader2, X, Upload, Users, Image as ImageIcon, Sparkles } from "lucide-react";
+import { useFleetCars } from "@/hooks/useErpData";
 import logo from "@/assets/logo.png";
 
 type Car = {
