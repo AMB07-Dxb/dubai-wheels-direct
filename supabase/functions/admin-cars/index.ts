@@ -64,6 +64,17 @@ Deno.serve(async (req) => {
       });
     }
 
+    if (action === "list_customers") {
+      const { data, error } = await supabase
+        .from("customers")
+        .select("id, name, email, phone, country_code, created_at")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return new Response(JSON.stringify({ ok: true, customers: data }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
