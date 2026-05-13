@@ -192,7 +192,7 @@ const LoginPanel = ({ isOpen, onClose }: LoginPanelProps) => {
                     </select>
                     <div className="relative flex-1">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input id="panel-phone" placeholder="Phone number" className="pl-10 h-12 rounded-xl border-border" />
+                      <Input id="panel-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" className="pl-10 h-12 rounded-xl border-border" />
                     </div>
                   </div>
                 </div>
