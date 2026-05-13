@@ -51,7 +51,10 @@ type HeroSlide = {
   weekly: number;
   monthly: number;
   position: number;
+  car_id?: string | null;
 };
+
+const HERO_MAX = 4;
 
 const CATEGORIES = ["sedan", "suv", "luxury", "economy", "sports", "special-offers"];
 const ADMIN_EMAIL = "admin@alemad.ae";
