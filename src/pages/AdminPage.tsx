@@ -51,7 +51,10 @@ type HeroSlide = {
   weekly: number;
   monthly: number;
   position: number;
+  car_id?: string | null;
 };
+
+const HERO_MAX = 4;
 
 const CATEGORIES = ["sedan", "suv", "luxury", "economy", "sports", "special-offers"];
 const ADMIN_EMAIL = "admin@alemad.ae";
@@ -202,6 +205,47 @@ const AdminPage = () => {
       loadSlides();
     } catch (e: any) { toast.error(e.message); }
   };
+
+  // Sync selected fleet cars → hero_slides (max 4)
+  const [syncingHero, setSyncingHero] = useState(false);
+  const toggleHeroCar = (carId: string) => {
+    const has = slides.some((s) => s.car_id === carId);
+    if (has) {
+      const slide = slides.find((s) => s.car_id === carId);
+      if (slide) removeSlide(slide.id);
+      return;
+    }
+    if (slides.length >= HERO_MAX) {
+      toast.error(`You can only feature up to ${HERO_MAX} cars in the hero banner.`);
+      return;
+    }
+    addCarToHero(carId);
+  };
+
+  const addCarToHero = async (carId: string) => {
+    const c = fleetCars.find((f) => f.id === carId);
+    if (!c) return;
+    setSyncingHero(true);
+    try {
+      const payload = {
+        name: c.name,
+        category: (c.category || "Featured") as string,
+        subtitle: `${c.brand || ""} ${c.name}`.trim(),
+        description: `Experience the ${c.year || ""} ${c.name} — ready for your Dubai journey.`,
+        image: c.image,
+        daily: Number(c.daily) || 0,
+        weekly: Number(c.weekly) || 0,
+        monthly: Number(c.monthly) || 0,
+        position: slides.length,
+        car_id: c.id,
+      };
+      await callAdmin({ action: "hero_create", slide: payload });
+      toast.success(`${c.name} added to hero`);
+      await loadSlides();
+    } catch (e: any) { toast.error(e.message); }
+    finally { setSyncingHero(false); }
+  };
+
   const logout = () => {
     localStorage.removeItem("erp_admin");
     navigate("/");
@@ -460,37 +504,80 @@ const AdminPage = () => {
           <>
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h1 className="text-2xl font-display font-bold text-foreground flex items-center gap-2"><ImageIcon className="h-6 w-6" />Hero Slides</h1>
-                <p className="text-sm text-muted-foreground mt-1">Manage the cars shown on the homepage hero. {slides.length} active slide(s).</p>
+                <h1 className="text-2xl font-display font-bold text-foreground flex items-center gap-2"><ImageIcon className="h-6 w-6" />Hero Banner Cars</h1>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Pick up to <strong>{HERO_MAX}</strong> cars from your fleet to feature on the homepage hero. Pricing &amp; image stay in sync with the fleet listing.
+                </p>
               </div>
-              <Button onClick={() => setEditingSlide({ position: slides.length })}><Plus className="h-4 w-4 mr-1.5" />Add Slide</Button>
+              <span className={`text-sm font-semibold px-3 py-1 rounded-full ${slides.length >= HERO_MAX ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                {slides.length} / {HERO_MAX} selected
+              </span>
             </div>
 
-            {slides.length === 0 ? (
-              <div className="text-center py-20 bg-background border border-dashed border-border rounded-xl">
-                <ImageIcon className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground">No custom slides yet. The homepage will show defaults until you add slides.</p>
+            {slides.length > 0 && (
+              <div className="mb-8">
+                <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide">Featured on hero</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {slides.map((s) => {
+                    const live = fleetCars.find((f) => f.id === s.car_id);
+                    const img = live?.image || s.image;
+                    const daily = live?.daily ?? s.daily;
+                    const weekly = live?.weekly ?? s.weekly;
+                    const monthly = live?.monthly ?? s.monthly;
+                    const name = live?.name || s.name;
+                    return (
+                      <div key={s.id} className="bg-background border-2 border-primary/30 rounded-xl p-4 flex gap-4">
+                        <img src={img} alt={name} className="w-32 h-24 object-contain rounded-lg bg-muted/40" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="font-semibold text-foreground truncate">{name}</div>
+                            <span className="text-[10px] uppercase bg-primary/10 text-primary px-2 py-0.5 rounded-full">Featured</span>
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{s.subtitle}</div>
+                          <div className="text-[11px] text-muted-foreground mt-2">AED {daily}/d · {weekly}/w · {monthly}/m</div>
+                          <div className="flex gap-1 mt-2 -ml-2">
+                            <Button variant="ghost" size="sm" onClick={() => setEditingSlide(s)}><Pencil className="h-3.5 w-3.5 mr-1" />Edit Bio</Button>
+                            <Button variant="ghost" size="sm" onClick={() => removeSlide(s.id)}><Trash2 className="h-3.5 w-3.5 mr-1 text-destructive" />Remove</Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {slides.map((s) => (
-                  <div key={s.id} className="bg-background border border-border rounded-xl p-4 flex gap-4">
-                    <img src={s.image} alt={s.name} className="w-32 h-24 object-contain rounded-lg bg-muted/40" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="font-semibold text-foreground truncate">{s.name}</div>
-                        <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full">{s.category}</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{s.subtitle}</div>
-                      <div className="text-[11px] text-muted-foreground mt-2">AED {s.daily}/d · {s.weekly}/w · {s.monthly}/m</div>
-                      <div className="flex gap-1 mt-2 -ml-2">
-                        <Button variant="ghost" size="sm" onClick={() => setEditingSlide(s)}><Pencil className="h-3.5 w-3.5 mr-1" />Edit</Button>
-                        <Button variant="ghost" size="sm" onClick={() => removeSlide(s.id)}><Trash2 className="h-3.5 w-3.5 mr-1 text-destructive" />Delete</Button>
-                      </div>
+            )}
+
+            <h2 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide">Your fleet — tap to feature</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {fleetCars.map((c) => {
+                const selected = slides.some((s) => s.car_id === c.id);
+                const disabled = !selected && slides.length >= HERO_MAX;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    disabled={syncingHero || disabled}
+                    onClick={() => toggleHeroCar(c.id)}
+                    className={`relative text-left bg-background border rounded-xl p-3 transition-all ${
+                      selected
+                        ? "border-primary ring-2 ring-primary/30"
+                        : disabled
+                          ? "border-border opacity-40 cursor-not-allowed"
+                          : "border-border hover:border-primary/60 hover:shadow-md"
+                    }`}
+                  >
+                    <div className={`absolute top-2 right-2 h-5 w-5 rounded-md border flex items-center justify-center text-[11px] font-bold ${selected ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border"}`}>
+                      {selected ? "✓" : ""}
                     </div>
-                  </div>
-                ))}
-              </div>
+                    <img src={c.image} alt={c.name} className="w-full h-20 object-contain bg-muted/30 rounded-md mb-2" />
+                    <div className="text-xs font-semibold text-foreground truncate">{c.name}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">AED {c.daily}/d · {c.weekly}/w · {c.monthly}/m</div>
+                  </button>
+                );
+              })}
+            </div>
+            {fleetCars.length === 0 && (
+              <p className="text-sm text-muted-foreground mt-4">Add cars in the Fleet tab to start featuring them on the hero.</p>
             )}
           </>
         )}

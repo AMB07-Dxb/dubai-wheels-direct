@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import aiLogo from "@/assets/al-emad-ai-logo.png";
 
@@ -86,9 +86,10 @@ const AlEmadAIChat = () => {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open Al Emad AI chat"
-          className="fixed bottom-6 right-6 z-[60] h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl hover:scale-105 transition-transform flex items-center justify-center"
+          className="fixed bottom-6 right-6 z-[60] h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-xl hover:scale-105 transition-transform flex flex-col items-center justify-center leading-none"
         >
-          <MessageCircle className="h-6 w-6" />
+          <span className="text-[8px] font-bold tracking-[0.15em] mb-0.5">AI</span>
+          <Bot className="h-6 w-6" />
         </button>
       )}
 

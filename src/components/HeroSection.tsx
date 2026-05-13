@@ -23,7 +23,25 @@ const HeroSection = () => {
     staleTime: 60_000,
   });
 
-  const slides: any[] = (dbSlides && dbSlides.length > 0) ? dbSlides : (siteConfig.heroSlides || fallbackConfig.heroSlides);
+  const { data: dbCars } = useQuery({
+    queryKey: ["hero_slides_cars"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("cars").select("id,name,image,daily,weekly,monthly,category");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60_000,
+  });
+
+  // Merge live car data into each slide so pricing/image stay in sync with the fleet listing
+  const enriched = (dbSlides || []).map((s: any) => {
+    const car = s.car_id && dbCars ? dbCars.find((c: any) => c.id === s.car_id) : null;
+    return car
+      ? { ...s, image: car.image || s.image, daily: car.daily, weekly: car.weekly, monthly: car.monthly, name: car.name }
+      : s;
+  });
+
+  const slides: any[] = (enriched && enriched.length > 0) ? enriched.slice(0, 4) : (siteConfig.heroSlides || fallbackConfig.heroSlides);
 
 
   const [current, setCurrent] = useState(0);
