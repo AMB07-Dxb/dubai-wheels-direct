@@ -116,7 +116,7 @@ export const fetchCategories = disabled("fetchCategories") as () => Promise<stri
 export const fetchBrands = disabled("fetchBrands") as () => Promise<string[]>;
 export const fetchSiteConfig = disabled("fetchSiteConfig") as () => Promise<ERPSiteConfig>;
 export const fetchBlogPosts = disabled("fetchBlogPosts") as () => Promise<ERPBlogPost[]>;
-export const fetchBlogPost = disabled("fetchBlogPost") as () => Promise<ERPBlogPost>;
+export const fetchBlogPost = ((_slug?: string) => Promise.reject(new Error("fetchBlogPost disabled"))) as (slug: string) => Promise<ERPBlogPost>;
 export const fetchTestimonials = disabled("fetchTestimonials") as () => Promise<ERPTestimonial[]>;
 export const fetchFAQs = disabled("fetchFAQs") as () => Promise<ERPFAQ[]>;
 export const fetchSpecialOffers = disabled("fetchSpecialOffers") as () => Promise<ERPSpecialOffer[]>;
